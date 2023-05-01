@@ -29,7 +29,7 @@ func (r *NrSyntheticsMonitorInvalidAttributesRule) Enabled() bool {
 
 // Severity returns the rule severity
 func (r *NrSyntheticsMonitorInvalidAttributesRule) Severity() tflint.Severity {
-	return tflint.ERROR
+	return tflint.WARNING
 }
 
 // Link returns the rule reference link
@@ -57,10 +57,43 @@ func (r *NrSyntheticsMonitorInvalidAttributesRule) Check(runner tflint.Runner) e
 			continue
 		}
 
-		err := runner.EvaluateExpr(typeAttribute.Expr, func(typeValue string) bool {
-			fmt.Print(typeValue)
+		err := runner.EvaluateExpr(typeAttribute.Expr, func(typeValue string) error {
+			if typeValue == "BROWSER" {
+				bypassHeadRequestAttribute, exists := resource.Body.Attributes["bypass_head_request"]
+				if exists {
+					err := runner.EvaluateExpr(bypassHeadRequestAttribute.Expr, func(bypassHeadRequestValue bool) error {
+						runner.EmitIssue(
+							r,
+							fmt.Sprintf("'bypass_head_request' is not valid attribute for '%s' monitor", typeValue),
+							bypassHeadRequestAttribute.Expr.Range(),
+						)
 
-			return true
+						return nil
+					}, nil)
+
+					if err != nil {
+						return err
+					}
+				}
+
+				treatRedirectAsFailureAttribute, exists := resource.Body.Attributes["treat_redirect_as_failure"]
+				if exists {
+					err := runner.EvaluateExpr(treatRedirectAsFailureAttribute.Expr, func(treatRedirectAsFailureValue bool) error {
+						runner.EmitIssue(
+							r,
+							fmt.Sprintf("'treat_redirect_as_failure' is not valid attribute for '%s' monitor", typeValue),
+							treatRedirectAsFailureAttribute.Expr.Range(),
+						)
+
+						return nil
+					}, nil)
+
+					if err != nil {
+						return err
+					}
+				}
+			}
+			return nil
 		}, nil)
 
 		if err != nil {

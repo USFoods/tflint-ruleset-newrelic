@@ -25,20 +25,20 @@ resource "newrelic_synthetics_monitor" "monitor" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsMonitorInvalidAttributesRule(),
-					Message: "'bypass_head_request' is invalid attribute for 'BROWSER' monitor",
+					Message: "'bypass_head_request' is not valid attribute for 'BROWSER' monitor",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 3},
-						End:      hcl.Pos{Line: 5, Column: 23},
+						Start:    hcl.Pos{Line: 5, Column: 24},
+						End:      hcl.Pos{Line: 5, Column: 28},
 					},
 				},
 				{
 					Rule:    NewNrSyntheticsMonitorInvalidAttributesRule(),
-					Message: "'treat_redirect_as_failure' is invalid attribute for 'BROWSER' monitor",
+					Message: "'treat_redirect_as_failure' is not valid attribute for 'BROWSER' monitor",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 6, Column: 3},
-						End:      hcl.Pos{Line: 6, Column: 31},
+						Start:    hcl.Pos{Line: 6, Column: 30},
+						End:      hcl.Pos{Line: 6, Column: 34},
 					},
 				},
 			},
