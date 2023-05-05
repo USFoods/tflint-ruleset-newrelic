@@ -7,21 +7,21 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 )
 
-// NrSyntheticsMonitorInvalidPeriodRule checks whether newrelic_synthetics_monitor has valid period
-type NrSyntheticsMonitorInvalidPeriodRule struct {
+// NrSyntheticsScriptMonitorInvalidPeriodRule checks whether newrelic_synthetics_script_monitor has valid period
+type NrSyntheticsScriptMonitorInvalidPeriodRule struct {
 	tflint.DefaultRule
 
 	resourceType  string
 	attributeName string
-	periodTypes   map[string]bool
+	periods       map[string]bool
 }
 
-// NewNrSyntheticsMonitorInvalidPeriodRule returns a new rule
-func NewNrSyntheticsMonitorInvalidPeriodRule() *NrSyntheticsMonitorInvalidPeriodRule {
-	return &NrSyntheticsMonitorInvalidPeriodRule{
-		resourceType:  "newrelic_synthetics_monitor",
+// NewNrSyntheticsScriptMonitorInvalidPeriodRule returns a new rule
+func NewNrSyntheticsScriptMonitorInvalidPeriodRule() *NrSyntheticsScriptMonitorInvalidPeriodRule {
+	return &NrSyntheticsScriptMonitorInvalidPeriodRule{
+		resourceType:  "newrelic_synthetics_script_monitor",
 		attributeName: "period",
-		periodTypes: map[string]bool{
+		periods: map[string]bool{
 			"EVERY_MINUTE":     true,
 			"EVERY_5_MINUTES":  true,
 			"EVERY_10_MINUTES": true,
@@ -36,27 +36,27 @@ func NewNrSyntheticsMonitorInvalidPeriodRule() *NrSyntheticsMonitorInvalidPeriod
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsMonitorInvalidPeriodRule) Name() string {
-	return "newrelic_synthetics_monitor_invalid_period"
+func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Name() string {
+	return "newrelic_synthetics_script_monitor_invalid_period"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsMonitorInvalidPeriodRule) Enabled() bool {
+func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsMonitorInvalidPeriodRule) Severity() tflint.Severity {
+func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsMonitorInvalidPeriodRule) Link() string {
+func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Link() string {
 	return ""
 }
 
-// Check checks whether newrelic_synthetics_monitor has valid period
-func (r *NrSyntheticsMonitorInvalidPeriodRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_synthetics_script_monitor has valid period
+func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: r.attributeName},
@@ -69,18 +69,20 @@ func (r *NrSyntheticsMonitorInvalidPeriodRule) Check(runner tflint.Runner) error
 
 	for _, resource := range resources.Blocks {
 		attribute, exists := resource.Body.Attributes[r.attributeName]
+
 		if !exists {
 			continue
 		}
 
 		err := runner.EvaluateExpr(attribute.Expr, func(period string) error {
-			if !r.periodTypes[period] {
+			if !r.periods[period] {
 				runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%s' is invalid period", period),
 					attribute.Expr.Range(),
 				)
 			}
+
 			return nil
 		}, nil)
 

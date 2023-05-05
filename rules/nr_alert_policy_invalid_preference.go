@@ -3,8 +3,6 @@ package rules
 import (
 	"fmt"
 
-	"golang.org/x/exp/slices"
-
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 )
@@ -14,15 +12,19 @@ type NrAlertPolicyInvalidPreferenceRule struct {
 
 	resourceType    string
 	attributeName   string
-	preferenceTypes []string
+	preferenceTypes map[string]bool
 }
 
 // NewNrAlertPolicyInvalidPreferenceRule returns a new rule
 func NewNrAlertPolicyInvalidPreferenceRule() *NrAlertPolicyInvalidPreferenceRule {
 	return &NrAlertPolicyInvalidPreferenceRule{
-		resourceType:    "newrelic_alert_policy",
-		attributeName:   "incident_preference",
-		preferenceTypes: []string{"PER_POLICY", "PER_CONDITION", "PER_CONDITION_AND_TARGET"},
+		resourceType:  "newrelic_alert_policy",
+		attributeName: "incident_preference",
+		preferenceTypes: map[string]bool{
+			"PER_POLICY":               true,
+			"PER_CONDITION":            true,
+			"PER_CONDITION_AND_TARGET": true,
+		},
 	}
 }
 
@@ -65,7 +67,7 @@ func (r *NrAlertPolicyInvalidPreferenceRule) Check(runner tflint.Runner) error {
 		}
 
 		err := runner.EvaluateExpr(attribute.Expr, func(incidentPreference string) error {
-			if !slices.Contains(r.preferenceTypes, incidentPreference) {
+			if !r.preferenceTypes[incidentPreference] {
 				runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%s' is invalid incident preference", incidentPreference),

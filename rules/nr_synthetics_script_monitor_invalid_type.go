@@ -7,8 +7,8 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 )
 
-// NrSyntheticsMonitorInvalidTypeRule checks whether newrelic_synthetics_monitor has valid type
-type NrSyntheticsMonitorInvalidTypeRule struct {
+// NrSyntheticsScriptMonitorInvalidTypeRule checks whether newrelic_synthetics_script_monitor has valid type
+type NrSyntheticsScriptMonitorInvalidTypeRule struct {
 	tflint.DefaultRule
 
 	resourceType  string
@@ -16,40 +16,40 @@ type NrSyntheticsMonitorInvalidTypeRule struct {
 	monitorTypes  map[string]bool
 }
 
-// NewNrSyntheticsMonitorInvalidTypeRule returns a new rule
-func NewNrSyntheticsMonitorInvalidTypeRule() *NrSyntheticsMonitorInvalidTypeRule {
-	return &NrSyntheticsMonitorInvalidTypeRule{
-		resourceType:  "newrelic_synthetics_monitor",
+// NewNrSyntheticsScriptMonitorInvalidTypeRule returns a new rule
+func NewNrSyntheticsScriptMonitorInvalidTypeRule() *NrSyntheticsScriptMonitorInvalidTypeRule {
+	return &NrSyntheticsScriptMonitorInvalidTypeRule{
+		resourceType:  "newrelic_synthetics_script_monitor",
 		attributeName: "type",
 		monitorTypes: map[string]bool{
-			"SIMPLE":  true,
-			"BROWSER": true,
+			"SCRIPT_API":     true,
+			"SCRIPT_BROWSER": true,
 		},
 	}
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsMonitorInvalidTypeRule) Name() string {
-	return "newrelic_synthetics_monitor_invalid_type"
+func (r *NrSyntheticsScriptMonitorInvalidTypeRule) Name() string {
+	return "newrelic_synthetics_script_monitor_invalid_type"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsMonitorInvalidTypeRule) Enabled() bool {
+func (r *NrSyntheticsScriptMonitorInvalidTypeRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsMonitorInvalidTypeRule) Severity() tflint.Severity {
+func (r *NrSyntheticsScriptMonitorInvalidTypeRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsMonitorInvalidTypeRule) Link() string {
+func (r *NrSyntheticsScriptMonitorInvalidTypeRule) Link() string {
 	return ""
 }
 
-// Check checks whether newrelic_synthetics_monitor has valid type
-func (r *NrSyntheticsMonitorInvalidTypeRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_synthetics_script_monitor has valid type
+func (r *NrSyntheticsScriptMonitorInvalidTypeRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: r.attributeName},
