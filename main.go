@@ -10,7 +10,7 @@ func main() {
 	plugin.Serve(&plugin.ServeOpts{
 		RuleSet: &tflint.BuiltinRuleSet{
 			Name:    "newrelic",
-			Version: "0.2.2",
+			Version: "0.2.3",
 			Rules: []tflint.Rule{
 				rules.NewNrAlertPolicyInvalidPreferenceRule(),
 				rules.NewNrNrqlAlertConditionInvalidTypeRule(),
@@ -18,7 +18,7 @@ func main() {
 				rules.NewNrSyntheticsMonitorInvalidTypeRule(),
 				rules.NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule(),
 				rules.NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule(),
-				rules.NewNrSyntheticsMonitorInvalidPeriodRule(),
+				rules.NewNrSyntheticsScriptMonitorInvalidPeriodRule(),
 				rules.NewNrSyntheticsScriptMonitorInvalidTypeRule(),
 			},
 		},
