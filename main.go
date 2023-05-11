@@ -11,7 +11,7 @@ func main() {
 	plugin.Serve(&plugin.ServeOpts{
 		RuleSet: &tflint.BuiltinRuleSet{
 			Name:    "newrelic",
-			Version: "0.3.0",
+			Version: "0.3.1",
 			Rules: []tflint.Rule{
 				rules.NewNrAlertPolicyInvalidPreferenceRule(),
 				rules.NewNrNrqlAlertConditionInvalidTypeRule(),

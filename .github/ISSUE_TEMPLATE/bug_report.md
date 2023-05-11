@@ -53,24 +53,33 @@ Please list the resources as a list, for example:
 ```
 
 ### Actual Behavior
+
 What actually happened?
 
 ### Expected Behavior
+
 What should have happened?
 
 ### Steps to Reproduce
+
 Please list the steps required to reproduce the issue, for example:
+
 1. `tflint --recursive --module`
 
 ### Debug Output
+
 Please provide a link to a GitHub Gist containing the complete debug output. Please do NOT paste the debug output in the issue; just paste a link to the Gist.
 
 ### Panic Output
+
 If TFLint produced a panic, please provide a link to a GitHub Gist containing the output.
 
 ### Important Factoids
+
 Are there anything atypical about your configuration that we should know?
 
 ### References
+
 Are there any other GitHub issues (open or closed) or Pull Requests that should be linked here? For example:
+
 - GH-1234
