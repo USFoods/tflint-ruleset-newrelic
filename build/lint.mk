@@ -21,7 +21,7 @@ GO_FILES        ?= $(shell find $(SRCDIR) -type f -name "*.go" | grep -v -e ".gi
 PROJECT_MODULE  ?= $(shell $(GO) list -m)
 GO_PKGS         ?= $(shell $(GO) list ./...)
 
-lint: deps gofmt
+lint: deps gofmt golangci goimports
 lint-fix: deps gofmt-fix
 
 gofmt: deps
@@ -32,4 +32,12 @@ gofmt-fix: deps
 	@echo "=== $(PROJECT_NAME) === [ gofmt-fix        ]: Fixing file format with $(GOFMT)..."
 	@$(GOFMT) -e -l -s -w $(GO_FILES)
 
-.PHONY: lint gofmt gofmt-fix lint-fix
+goimports: deps
+	@echo "=== $(PROJECT_NAME) === [ goimports        ]: Checking imports with $(GOIMPORTS)..."
+	@$(GOIMPORTS) -l -w -local $(PROJECT_MODULE) $(GO_FILES)
+
+golangci: deps
+	@echo "=== $(PROJECT_NAME) === [ golangci-lint    ]: Linting using $(GOLINTER) ($(COMMIT_LINT_CMD))..."
+	@$(GOLINTER) run
+
+.PHONY: lint gofmt gofmt-fix lint-fix golangci goimports

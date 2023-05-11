@@ -62,7 +62,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tfli
 					err := runner.EvaluateExpr(attr.Expr, func(aggregationDelay int) error {
 
 						if aggregationMethod == "event_timer" {
-							runner.EmitIssue(
+							return runner.EmitIssue(
 								r,
 								fmt.Sprintf("aggregation_delay invalid for aggregation_method '%s'", aggregationMethod),
 								attr.Expr.Range(),
@@ -71,7 +71,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tfli
 
 						if aggregationMethod == "event_flow" {
 							if aggregationDelay > 1200 {
-								runner.EmitIssue(
+								return runner.EmitIssue(
 									r,
 									fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
 									attr.Expr.Range(),
@@ -81,7 +81,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tfli
 
 						if aggregationMethod == "cadence" {
 							if aggregationDelay > 3600 {
-								runner.EmitIssue(
+								return runner.EmitIssue(
 									r,
 									fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
 									attr.Expr.Range(),

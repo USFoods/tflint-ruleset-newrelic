@@ -70,7 +70,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Check(runner tfl
 
 		err := runner.EvaluateExpr(attribute.Expr, func(aggregationMethod string) error {
 			if !r.aggregationMethods[aggregationMethod] {
-				runner.EmitIssue(
+				return runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%s' is invalid aggregation method", aggregationMethod),
 					attribute.Expr.Range(),

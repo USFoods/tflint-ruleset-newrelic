@@ -68,7 +68,7 @@ func (r *NrAlertPolicyInvalidPreferenceRule) Check(runner tflint.Runner) error {
 
 		err := runner.EvaluateExpr(attribute.Expr, func(incidentPreference string) error {
 			if !r.preferenceTypes[incidentPreference] {
-				runner.EmitIssue(
+				return runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%s' is invalid incident preference", incidentPreference),
 					attribute.Expr.Range(),
