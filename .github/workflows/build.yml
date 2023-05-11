@@ -11,6 +11,24 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: 'go.mod'
+      - name: Cache deps
+        uses: actions/cache@v3
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+      - name: Run lint
+        run: make lint
   test:
     name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -24,6 +42,13 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version-file: 'go.mod'
+    - name: Cache deps
+      uses: actions/cache@v3
+      with:
+        path: ~/go/pkg/mod
+        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+        restore-keys: |
+          ${{ runner.os }}-go-
     - name: Run tests
       run: make test
     - name: Run build

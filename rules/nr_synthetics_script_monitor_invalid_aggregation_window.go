@@ -64,7 +64,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Check(runner tfl
 
 		err := runner.EvaluateExpr(attribute.Expr, func(aggregationWindow int) error {
 			if aggregationWindow < 30 || aggregationWindow > 900 {
-				runner.EmitIssue(
+				return runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%d' is invalid aggregation_window", aggregationWindow),
 					attribute.Expr.Range(),

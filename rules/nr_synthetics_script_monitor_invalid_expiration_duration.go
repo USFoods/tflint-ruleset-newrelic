@@ -64,7 +64,7 @@ func (r *NrSyntheticsScriptMonitorInvalidExpirationDurationRule) Check(runner tf
 
 		err := runner.EvaluateExpr(attribute.Expr, func(expirationDuration int) error {
 			if expirationDuration < 30 || expirationDuration > 172800 {
-				runner.EmitIssue(
+				return runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%d' is invalid expiration_duration", expirationDuration),
 					attribute.Expr.Range(),

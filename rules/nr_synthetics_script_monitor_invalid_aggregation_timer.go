@@ -62,7 +62,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationTimerRule) Check(runner tfli
 					err := runner.EvaluateExpr(attr.Expr, func(aggregationTimer int) error {
 
 						if aggregationMethod != "event_timer" {
-							runner.EmitIssue(
+							return runner.EmitIssue(
 								r,
 								fmt.Sprintf("aggregation_timer invalid for aggregation_method '%s'", aggregationMethod),
 								attr.Expr.Range(),
@@ -70,7 +70,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationTimerRule) Check(runner tfli
 						}
 
 						if aggregationTimer < 0 || aggregationTimer > 3600 {
-							runner.EmitIssue(
+							return runner.EmitIssue(
 								r,
 								fmt.Sprintf("'%d' is invalid aggregation_timer", aggregationTimer),
 								attr.Expr.Range(),

@@ -75,7 +75,7 @@ func (r *NrSyntheticsMonitorInvalidPeriodRule) Check(runner tflint.Runner) error
 
 		err := runner.EvaluateExpr(attribute.Expr, func(period string) error {
 			if !r.periodTypes[period] {
-				runner.EmitIssue(
+				return runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%s' is invalid period", period),
 					attribute.Expr.Range(),

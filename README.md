@@ -46,19 +46,19 @@ plugin "template" {
 
 Clone the repository locally and run the following command:
 
-```
+```bash
 $ make
 ```
 
 You can easily install the built plugin with the following:
 
-```
+```bash
 $ make install
 ```
 
 You can run the built plugin like the following:
 
-```
+```bash
 $ cat << EOS > .tflint.hcl
 plugin "template" {
   enabled = true
