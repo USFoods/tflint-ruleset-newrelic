@@ -22,8 +22,8 @@ func NewNrNrqlAlertConditionInvalidTypeRule() *NrNrqlAlertConditionInvalidTypeRu
 		resourceType:  "newrelic_nrql_alert_condition",
 		attributeName: "type",
 		conditionTypes: map[string]bool{
-			"STATIC":   true,
-			"BASELINE": true,
+			"static":   true,
+			"baseline": true,
 		},
 	}
 }
