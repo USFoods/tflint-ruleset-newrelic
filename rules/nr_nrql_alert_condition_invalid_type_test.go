@@ -33,11 +33,20 @@ resource "newrelic_nrql_alert_condition" "condition" {
 			},
 		},
 		{
-			Name: "no issue found",
+			Name: "no issue found static",
 			Content: `
 resource "newrelic_nrql_alert_condition" "condition" {
 	name = "My Condition"
-	type = "STATIC"
+	type = "static"
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found baseline",
+			Content: `
+resource "newrelic_nrql_alert_condition" "condition" {
+	name = "My Condition"
+	type = "baseline"
 }`,
 			Expected: helper.Issues{},
 		},
