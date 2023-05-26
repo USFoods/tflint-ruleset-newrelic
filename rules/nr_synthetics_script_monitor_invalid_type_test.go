@@ -16,18 +16,18 @@ func TestNrSyntheticsScriptMonitorInvalidTypeRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "BASIC"
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "BASIC"
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidTypeRule(),
 					Message: "'BASIC' is invalid monitor type",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 4, Column: 12},
-						End:      hcl.Pos{Line: 4, Column: 19},
+						Start:    hcl.Pos{Line: 4, Column: 10},
+						End:      hcl.Pos{Line: 4, Column: 17},
 					},
 				},
 			},
@@ -35,10 +35,10 @@ func TestNrSyntheticsScriptMonitorInvalidTypeRule(t *testing.T) {
 		{
 			Name: "no issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "SCRIPT_API"
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+}`,
 			Expected: helper.Issues{},
 		},
 	}

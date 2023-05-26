@@ -17,7 +17,7 @@ func TestNrAlertPolicyInvalidPreferenceRule(t *testing.T) {
 			Name: "issue found",
 			Content: `
 resource "newrelic_alert_policy" "policy" {
-	incident_preference = "PER_ISSUE"
+  incident_preference = "PER_ISSUE"
 }`,
 			Expected: helper.Issues{
 				{
@@ -25,8 +25,8 @@ resource "newrelic_alert_policy" "policy" {
 					Message: "'PER_ISSUE' is invalid incident preference",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 3, Column: 24},
-						End:      hcl.Pos{Line: 3, Column: 35},
+						Start:    hcl.Pos{Line: 3, Column: 25},
+						End:      hcl.Pos{Line: 3, Column: 36},
 					},
 				},
 			},
@@ -35,7 +35,7 @@ resource "newrelic_alert_policy" "policy" {
 			Name: "no issue found",
 			Content: `
 resource "newrelic_alert_policy" "policy" {
-	incident_preference = "PER_POLICY"
+  incident_preference = "PER_POLICY"
 }`,
 			Expected: helper.Issues{},
 		},

@@ -3,6 +3,7 @@ package rules
 import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrSyntheticsScriptMonitorInvalidSlidyByRule checks whether newrelic_synthetics_script_monitor has valid slidy_by
@@ -21,7 +22,7 @@ func NewNrSyntheticsScriptMonitorInvalidSlidyByRule() *NrSyntheticsScriptMonitor
 
 // Name returns the rule name
 func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Name() string {
-	return "newrelic_synthetics_script_monitor_invalid_slidy_by"
+	return "nr_synthetics_script_monitor_invalid_slidy_by"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -36,7 +37,7 @@ func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Severity() tflint.Severity
 
 // Link returns the rule reference link
 func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_synthetics_script_monitor has valid slidy_by
@@ -53,53 +54,56 @@ func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Check(runner tflint.Runner
 	}
 
 	for _, resource := range resources.Blocks {
+
+		attr, ok := resource.Body.Attributes["slide_by"]
+
+		if !ok {
+			continue
+		}
+
+		var slideBy int
+		err := runner.EvaluateExpr(attr.Expr, &slideBy, nil)
+
+		if err != nil {
+			return err
+		}
+
+		attr, ok = resource.Body.Attributes["aggregation_window"]
+
+		if !ok {
+			continue
+		}
+
+		var aggregationWindow int
+		err = runner.EvaluateExpr(attr.Expr, &aggregationWindow, nil)
+
+		if err != nil {
+			return err
+		}
+
 		attr, exists := resource.Body.Attributes["aggregation_window"]
 
 		if !exists {
 			continue
 		}
 
-		err := runner.EvaluateExpr(attr.Expr, func(aggregationWindow int) error {
-			attr, exists := resource.Body.Attributes["slide_by"]
-
-			if !exists {
-				return nil
-			}
-
-			err := runner.EvaluateExpr(attr.Expr, func(slideBy int) error {
-				// slide_by must be less than aggregation_window
-				if slideBy > aggregationWindow {
-					return runner.EmitIssue(
-						r,
-						"slide_by is greater than aggregation_window",
-						attr.Expr.Range(),
-					)
-				}
-
-				// slide_by must be a factor of aggregation_window
-				if aggregationWindow%slideBy != 0 {
-					return runner.EmitIssue(
-						r,
-						"slide_by is not a factor of aggregation_window",
-						attr.Expr.Range(),
-					)
-				}
-
-				return nil
-			}, nil)
-
-			if err != nil {
-				return err
-			}
-
-			return nil
-		}, nil)
-
-		if err != nil {
-			return err
+		// slide_by must be less than aggregation_window
+		if slideBy > aggregationWindow {
+			return runner.EmitIssue(
+				r,
+				"slide_by is greater than aggregation_window",
+				attr.Expr.Range(),
+			)
 		}
 
-		return nil
+		// slide_by must be a factor of aggregation_window
+		if aggregationWindow%slideBy != 0 {
+			return runner.EmitIssue(
+				r,
+				"slide_by is not a factor of aggregation_window",
+				attr.Expr.Range(),
+			)
+		}
 	}
 
 	return nil

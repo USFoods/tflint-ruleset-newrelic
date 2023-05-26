@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrSyntheticsScriptMonitorInvalidAggregationMethodRule checks whether newrelic_synthetics_script_monitor has valid aggregation_method
@@ -31,7 +32,7 @@ func NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule() *NrSyntheticsScr
 
 // Name returns the rule name
 func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Name() string {
-	return "newrelic_synthetics_script_monitor_invalid_aggregation_method"
+	return "nr_synthetics_script_monitor_invalid_aggregation_method"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -46,7 +47,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Severity() tflin
 
 // Link returns the rule reference link
 func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_synthetics_script_monitor has valid aggregation_method

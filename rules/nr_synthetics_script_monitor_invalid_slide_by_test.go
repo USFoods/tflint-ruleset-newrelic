@@ -16,19 +16,19 @@ func TestNrSyntheticsScriptMonitorInvalidSlideByRule(t *testing.T) {
 		{
 			Name: "issue found greater than",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_window = 60
-				slide_by = 120
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_window = 60
+  slide_by = 120
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidSlidyByRule(),
 					Message: "slide_by is greater than aggregation_window",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 16},
-						End:      hcl.Pos{Line: 5, Column: 19},
+						Start:    hcl.Pos{Line: 4, Column: 24},
+						End:      hcl.Pos{Line: 4, Column: 26},
 					},
 				},
 			},
@@ -36,19 +36,19 @@ func TestNrSyntheticsScriptMonitorInvalidSlideByRule(t *testing.T) {
 		{
 			Name: "issue found not a factor",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_window = 120
-				slide_by = 45
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_window = 120
+  slide_by = 45
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidSlidyByRule(),
 					Message: "slide_by is not a factor of aggregation_window",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 16},
-						End:      hcl.Pos{Line: 5, Column: 18},
+						Start:    hcl.Pos{Line: 4, Column: 24},
+						End:      hcl.Pos{Line: 4, Column: 27},
 					},
 				},
 			},
@@ -56,29 +56,29 @@ func TestNrSyntheticsScriptMonitorInvalidSlideByRule(t *testing.T) {
 		{
 			Name: "no issue found missing aggregation_window",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				slide_by = 60
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  slide_by = 60
+}`,
 			Expected: helper.Issues{},
 		},
 		{
 			Name: "no issue found missing slide_by",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_window = 60
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_window = 60
+}`,
 			Expected: helper.Issues{},
 		},
 		{
 			Name: "no issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_window = 60
-				slide_by = 30
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_window = 60
+  slide_by = 30
+}`,
 			Expected: helper.Issues{},
 		},
 	}

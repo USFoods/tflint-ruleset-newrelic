@@ -16,19 +16,19 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationDelayRule(t *testing.T) {
 		{
 			Name: "issue found event_timer",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_method = "event_timer"
-				aggregation_delay = 60
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "event_timer"
+  aggregation_delay = 60
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule(),
 					Message: "aggregation_delay invalid for aggregation_method 'event_timer'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 25},
-						End:      hcl.Pos{Line: 5, Column: 27},
+						Start:    hcl.Pos{Line: 4, Column: 24},
+						End:      hcl.Pos{Line: 4, Column: 37},
 					},
 				},
 			},
@@ -36,19 +36,19 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationDelayRule(t *testing.T) {
 		{
 			Name: "issue found event_flow",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_method = "event_flow"
-				aggregation_delay = 1500
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "event_flow"
+  aggregation_delay = 1500
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule(),
 					Message: "'1500' invalid aggregation_delay for aggregation_method 'event_flow'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 25},
-						End:      hcl.Pos{Line: 5, Column: 29},
+						Start:    hcl.Pos{Line: 4, Column: 24},
+						End:      hcl.Pos{Line: 4, Column: 36},
 					},
 				},
 			},
@@ -56,19 +56,19 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationDelayRule(t *testing.T) {
 		{
 			Name: "issue found cadence",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_method = "cadence"
-				aggregation_delay = 3900
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "cadence"
+  aggregation_delay = 3900
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule(),
 					Message: "'3900' invalid aggregation_delay for aggregation_method 'cadence'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 25},
-						End:      hcl.Pos{Line: 5, Column: 29},
+						Start:    hcl.Pos{Line: 4, Column: 24},
+						End:      hcl.Pos{Line: 4, Column: 33},
 					},
 				},
 			},
@@ -76,30 +76,30 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationDelayRule(t *testing.T) {
 		{
 			Name: "no issue found event_flow",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_method = "event_flow"
-				aggregation_delay = 600
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "event_flow"
+  aggregation_delay = 600
+}`,
 			Expected: helper.Issues{},
 		},
 		{
 			Name: "no issue found cadence",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_method = "cadence"
-				aggregation_delay = 3600
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "cadence"
+  aggregation_delay = 3600
+}`,
 			Expected: helper.Issues{},
 		},
 		{
 			Name: "no issue found aggregation_delay not set",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				aggregation_method = "event_timer"
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "event_timer"
+}`,
 			Expected: helper.Issues{},
 		},
 	}

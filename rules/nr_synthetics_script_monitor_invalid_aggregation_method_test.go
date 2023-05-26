@@ -16,19 +16,19 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationMethodRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "SCRIPT_API"
-				aggregation_method = "SUM"
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+  aggregation_method = "SUM"
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule(),
 					Message: "'SUM' is invalid aggregation method",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 26},
-						End:      hcl.Pos{Line: 5, Column: 31},
+						Start:    hcl.Pos{Line: 5, Column: 24},
+						End:      hcl.Pos{Line: 5, Column: 29},
 					},
 				},
 			},
@@ -36,11 +36,11 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationMethodRule(t *testing.T) {
 		{
 			Name: "no issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "SCRIPT_API"
-				aggregation_method = "event_flow"
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+  aggregation_method = "event_flow"
+}`,
 			Expected: helper.Issues{},
 		},
 	}

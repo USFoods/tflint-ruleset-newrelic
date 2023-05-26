@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrSyntheticsScriptMonitorInvalidAggregationWindowRule checks whether newrelic_synthetics_script_monitor has valid aggregation_window
@@ -13,6 +14,8 @@ type NrSyntheticsScriptMonitorInvalidAggregationWindowRule struct {
 
 	resourceType  string
 	attributeName string
+	min           int
+	max           int
 }
 
 // NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule returns a new rule
@@ -20,12 +23,14 @@ func NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule() *NrSyntheticsScr
 	return &NrSyntheticsScriptMonitorInvalidAggregationWindowRule{
 		resourceType:  "newrelic_synthetics_script_monitor",
 		attributeName: "aggregation_window",
+		min:           30,
+		max:           900,
 	}
 }
 
 // Name returns the rule name
 func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Name() string {
-	return "newrelic_synthetics_script_monitor_invalid_aggregation_window"
+	return "nr_synthetics_script_monitor_invalid_aggregation_window"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -40,7 +45,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Severity() tflin
 
 // Link returns the rule reference link
 func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_synthetics_script_monitor has valid aggregation_window
@@ -63,7 +68,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Check(runner tfl
 		}
 
 		err := runner.EvaluateExpr(attribute.Expr, func(aggregationWindow int) error {
-			if aggregationWindow < 30 || aggregationWindow > 900 {
+			if aggregationWindow < r.min || aggregationWindow > r.max {
 				return runner.EmitIssue(
 					r,
 					fmt.Sprintf("'%d' is invalid aggregation_window", aggregationWindow),

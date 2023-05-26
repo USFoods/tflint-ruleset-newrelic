@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrNrqlAlertConditionInvalidTypeRule checks whether newrelic_nrql_alert_condition has valid type
@@ -30,7 +31,7 @@ func NewNrNrqlAlertConditionInvalidTypeRule() *NrNrqlAlertConditionInvalidTypeRu
 
 // Name returns the rule name
 func (r *NrNrqlAlertConditionInvalidTypeRule) Name() string {
-	return "newrelic_nrql_alert_condition_invalid_type"
+	return "nr_nrql_alert_condition_invalid_type"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -45,7 +46,7 @@ func (r *NrNrqlAlertConditionInvalidTypeRule) Severity() tflint.Severity {
 
 // Link returns the rule reference link
 func (r *NrNrqlAlertConditionInvalidTypeRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_nrql_alert_condition has valid type

@@ -17,9 +17,9 @@ func TestNrSyntheticsMonitorInvalidPeriodRule(t *testing.T) {
 			Name: "issue found",
 			Content: `
 resource "newrelic_synthetics_monitor" "monitor" {
-	name = "My Monitor"
-	type = "SIMPLE"
-	period = 300
+  name = "My Monitor"
+  type = "SIMPLE"
+  period = 300
 }`,
 			Expected: helper.Issues{
 				{
@@ -27,8 +27,8 @@ resource "newrelic_synthetics_monitor" "monitor" {
 					Message: "'300' is invalid period",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 11},
-						End:      hcl.Pos{Line: 5, Column: 14},
+						Start:    hcl.Pos{Line: 5, Column: 12},
+						End:      hcl.Pos{Line: 5, Column: 15},
 					},
 				},
 			},
@@ -37,9 +37,9 @@ resource "newrelic_synthetics_monitor" "monitor" {
 			Name: "no issue found",
 			Content: `
 resource "newrelic_synthetics_monitor" "monitor" {
-	  name = "My Monitor"
-	  type = "SIMPLE"
-	  period = "EVERY_5_MINUTES"
+  name = "My Monitor"
+  type = "SIMPLE"
+  period = "EVERY_5_MINUTES"
 }`,
 			Expected: helper.Issues{},
 		},

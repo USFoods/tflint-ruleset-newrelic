@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 type NrAlertPolicyInvalidPreferenceRule struct {
@@ -30,7 +31,7 @@ func NewNrAlertPolicyInvalidPreferenceRule() *NrAlertPolicyInvalidPreferenceRule
 
 // Name returns the rule name
 func (r *NrAlertPolicyInvalidPreferenceRule) Name() string {
-	return "newrelic_alert_policy_invalid_preference"
+	return "nr_alert_policy_invalid_preference"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -45,7 +46,7 @@ func (r *NrAlertPolicyInvalidPreferenceRule) Severity() tflint.Severity {
 
 // Link returns the rule reference link
 func (r *NrAlertPolicyInvalidPreferenceRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_alert_policy has valid incident_preference

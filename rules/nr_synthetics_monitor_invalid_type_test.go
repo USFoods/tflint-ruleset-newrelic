@@ -17,8 +17,8 @@ func TestNrSyntheticsMonitorInvalidTypeRule(t *testing.T) {
 			Name: "issue found",
 			Content: `
 resource "newrelic_synthetics_monitor" "monitor" {
-	name = "My Monitor"
-	type = "BASIC"
+  name = "My Monitor"
+  type = "BASIC"
 }`,
 			Expected: helper.Issues{
 				{
@@ -26,8 +26,8 @@ resource "newrelic_synthetics_monitor" "monitor" {
 					Message: "'BASIC' is invalid monitor type",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 4, Column: 9},
-						End:      hcl.Pos{Line: 4, Column: 16},
+						Start:    hcl.Pos{Line: 4, Column: 10},
+						End:      hcl.Pos{Line: 4, Column: 17},
 					},
 				},
 			},
@@ -36,8 +36,8 @@ resource "newrelic_synthetics_monitor" "monitor" {
 			Name: "no issue found",
 			Content: `
 resource "newrelic_synthetics_monitor" "monitor" {
-	name = "My Monitor"
-	type = "SIMPLE"
+  name = "My Monitor"
+  type = "SIMPLE"
 }`,
 			Expected: helper.Issues{},
 		},

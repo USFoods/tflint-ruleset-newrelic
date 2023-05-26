@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrSyntheticsScriptMonitorInvalidAggregationDelayRule checks whether newrelic_synthetics_monitor has valid aggregation_delay
@@ -23,7 +24,7 @@ func NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule() *NrSyntheticsScri
 
 // Name returns the rule name
 func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Name() string {
-	return "newrelic_synthetics_script_monitor_invalid_aggregation_delay"
+	return "nr_synthetics_script_monitor_invalid_aggregation_delay"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -38,7 +39,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Severity() tflint
 
 // Link returns the rule reference link
 func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_synthetics_script_monitor has valid aggregation_delay
@@ -55,57 +56,59 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tfli
 	}
 
 	for _, resource := range resources.Blocks {
-		if attr, exists := resource.Body.Attributes["aggregation_method"]; exists {
-			err := runner.EvaluateExpr(attr.Expr, func(aggregationMethod string) error {
+		attr, ok := resource.Body.Attributes["aggregation_delay"]
 
-				if attr, exists := resource.Body.Attributes["aggregation_delay"]; exists {
-					err := runner.EvaluateExpr(attr.Expr, func(aggregationDelay int) error {
+		if !ok {
+			continue
+		}
 
-						if aggregationMethod == "event_timer" {
-							return runner.EmitIssue(
-								r,
-								fmt.Sprintf("aggregation_delay invalid for aggregation_method '%s'", aggregationMethod),
-								attr.Expr.Range(),
-							)
-						}
+		var aggregationDelay int
+		err := runner.EvaluateExpr(attr.Expr, &aggregationDelay, nil)
 
-						if aggregationMethod == "event_flow" {
-							if aggregationDelay > 1200 {
-								return runner.EmitIssue(
-									r,
-									fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
-									attr.Expr.Range(),
-								)
-							}
-						}
+		if err != nil {
+			return err
+		}
 
-						if aggregationMethod == "cadence" {
-							if aggregationDelay > 3600 {
-								return runner.EmitIssue(
-									r,
-									fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
-									attr.Expr.Range(),
-								)
-							}
-						}
+		attr, ok = resource.Body.Attributes["aggregation_method"]
 
-						return nil
-					}, nil)
+		if !ok {
+			continue
+		}
 
-					if err != nil {
-						return err
-					}
-				}
+		var aggregationMethod string
+		err = runner.EvaluateExpr(attr.Expr, &aggregationMethod, nil)
 
-				return nil
+		if err != nil {
+			return err
+		}
 
-			}, nil)
+		if aggregationMethod == "event_timer" {
+			return runner.EmitIssue(
+				r,
+				fmt.Sprintf("aggregation_delay invalid for aggregation_method '%s'", aggregationMethod),
+				attr.Expr.Range(),
+			)
+		}
 
-			if err != nil {
-				return err
+		if aggregationMethod == "event_flow" {
+			if aggregationDelay > 1200 {
+				return runner.EmitIssue(
+					r,
+					fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
+					attr.Expr.Range(),
+				)
 			}
 		}
 
+		if aggregationMethod == "cadence" {
+			if aggregationDelay > 3600 {
+				return runner.EmitIssue(
+					r,
+					fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
+					attr.Expr.Range(),
+				)
+			}
+		}
 	}
 
 	return nil

@@ -16,19 +16,19 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationWindowRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "SCRIPT_API"
-				aggregation_window = 10
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+  aggregation_window = 10
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule(),
 					Message: "'10' is invalid aggregation_window",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 26},
-						End:      hcl.Pos{Line: 5, Column: 28},
+						Start:    hcl.Pos{Line: 5, Column: 24},
+						End:      hcl.Pos{Line: 5, Column: 26},
 					},
 				},
 			},
@@ -36,11 +36,11 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationWindowRule(t *testing.T) {
 		{
 			Name: "no issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "SCRIPT_API"
-				aggregation_window = 60
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+  aggregation_window = 60
+}`,
 			Expected: helper.Issues{},
 		},
 	}

@@ -16,19 +16,19 @@ func TestNrSyntheticsScriptMonitorInvalidPeriodRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "SCRIPT_API"
-				period = 60
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+  period = 60
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidPeriodRule(),
 					Message: "'60' is invalid period",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 14},
-						End:      hcl.Pos{Line: 5, Column: 16},
+						Start:    hcl.Pos{Line: 5, Column: 12},
+						End:      hcl.Pos{Line: 5, Column: 14},
 					},
 				},
 			},
@@ -36,11 +36,11 @@ func TestNrSyntheticsScriptMonitorInvalidPeriodRule(t *testing.T) {
 		{
 			Name: "no issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				type = "SCRIPT_API"
-				period = "EVERY_MINUTE"
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+  period = "EVERY_MINUTE"
+}`,
 			Expected: helper.Issues{},
 		},
 	}

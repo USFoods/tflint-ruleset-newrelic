@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrSyntheticsScriptMonitorInvalidPeriodRule checks whether newrelic_synthetics_script_monitor has valid period
@@ -37,7 +38,7 @@ func NewNrSyntheticsScriptMonitorInvalidPeriodRule() *NrSyntheticsScriptMonitorI
 
 // Name returns the rule name
 func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Name() string {
-	return "newrelic_synthetics_script_monitor_invalid_period"
+	return "nr_synthetics_script_monitor_invalid_period"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -52,7 +53,7 @@ func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Severity() tflint.Severity 
 
 // Link returns the rule reference link
 func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_synthetics_script_monitor has valid period

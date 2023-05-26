@@ -17,8 +17,8 @@ func TestNrNrqlAlertConditionInvalidTypeRule(t *testing.T) {
 			Name: "issue found",
 			Content: `
 resource "newrelic_nrql_alert_condition" "condition" {
-	name = "My Condition"
-	type = "BASIC"
+  name = "My Condition"
+  type = "BASIC"
 }`,
 			Expected: helper.Issues{
 				{
@@ -26,8 +26,8 @@ resource "newrelic_nrql_alert_condition" "condition" {
 					Message: "'BASIC' is invalid condition type",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 4, Column: 9},
-						End:      hcl.Pos{Line: 4, Column: 16},
+						Start:    hcl.Pos{Line: 4, Column: 10},
+						End:      hcl.Pos{Line: 4, Column: 17},
 					},
 				},
 			},
@@ -36,8 +36,8 @@ resource "newrelic_nrql_alert_condition" "condition" {
 			Name: "no issue found static",
 			Content: `
 resource "newrelic_nrql_alert_condition" "condition" {
-	name = "My Condition"
-	type = "static"
+  name = "My Condition"
+  type = "static"
 }`,
 			Expected: helper.Issues{},
 		},
@@ -45,8 +45,8 @@ resource "newrelic_nrql_alert_condition" "condition" {
 			Name: "no issue found baseline",
 			Content: `
 resource "newrelic_nrql_alert_condition" "condition" {
-	name = "My Condition"
-	type = "baseline"
+  name = "My Condition"
+  type = "baseline"
 }`,
 			Expected: helper.Issues{},
 		},

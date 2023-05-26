@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrSyntheticsMonitorInvalidTypeRule checks whether newrelic_synthetics_monitor has valid type
@@ -30,7 +31,7 @@ func NewNrSyntheticsMonitorInvalidTypeRule() *NrSyntheticsMonitorInvalidTypeRule
 
 // Name returns the rule name
 func (r *NrSyntheticsMonitorInvalidTypeRule) Name() string {
-	return "newrelic_synthetics_monitor_invalid_type"
+	return "nr_synthetics_monitor_invalid_type"
 }
 
 // Enabled returns whether the rule is enabled by default
@@ -45,7 +46,7 @@ func (r *NrSyntheticsMonitorInvalidTypeRule) Severity() tflint.Severity {
 
 // Link returns the rule reference link
 func (r *NrSyntheticsMonitorInvalidTypeRule) Link() string {
-	return ""
+	return project.ReferenceLink(r.Name())
 }
 
 // Check checks whether newrelic_synthetics_monitor has valid type

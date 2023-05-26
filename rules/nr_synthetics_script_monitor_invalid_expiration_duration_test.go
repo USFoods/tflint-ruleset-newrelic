@@ -16,18 +16,18 @@ func TestNrSyntheticsScriptMonitorInvalidExpirationRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				expiration_duration = 0
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  expiration_duration = 0
+}`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrSyntheticsScriptMonitorInvalidExpirationDurationRule(),
 					Message: "'0' is invalid expiration_duration",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 4, Column: 27},
-						End:      hcl.Pos{Line: 4, Column: 28},
+						Start:    hcl.Pos{Line: 4, Column: 25},
+						End:      hcl.Pos{Line: 4, Column: 26},
 					},
 				},
 			},
@@ -35,10 +35,10 @@ func TestNrSyntheticsScriptMonitorInvalidExpirationRule(t *testing.T) {
 		{
 			Name: "no issue found",
 			Content: `
-			resource "newrelic_synthetics_script_monitor" "monitor" {
-				name = "My Monitor"
-				expiration_duration = 900
-			}`,
+resource "newrelic_synthetics_script_monitor" "monitor" {
+  name = "My Monitor"
+  expiration_duration = 900
+}`,
 			Expected: helper.Issues{},
 		},
 	}
