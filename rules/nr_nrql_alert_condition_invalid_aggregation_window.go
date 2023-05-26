@@ -8,8 +8,8 @@ import (
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
-// NrSyntheticsScriptMonitorInvalidAggregationWindowRule checks whether newrelic_synthetics_script_monitor has valid aggregation_window
-type NrSyntheticsScriptMonitorInvalidAggregationWindowRule struct {
+// NrNrqlAlerConditionInvalidAggregationWindowRule checks whether newrelic_nrql_alert_condition has valid aggregation_window
+type NrNrqlAlerConditionInvalidAggregationWindowRule struct {
 	tflint.DefaultRule
 
 	resourceType  string
@@ -18,10 +18,10 @@ type NrSyntheticsScriptMonitorInvalidAggregationWindowRule struct {
 	max           int
 }
 
-// NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule returns a new rule
-func NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule() *NrSyntheticsScriptMonitorInvalidAggregationWindowRule {
-	return &NrSyntheticsScriptMonitorInvalidAggregationWindowRule{
-		resourceType:  "newrelic_synthetics_script_monitor",
+// NewNrNrqlAlerConditionInvalidAggregationWindowRule returns a new rule
+func NewNrNrqlAlerConditionInvalidAggregationWindowRule() *NrNrqlAlerConditionInvalidAggregationWindowRule {
+	return &NrNrqlAlerConditionInvalidAggregationWindowRule{
+		resourceType:  "newrelic_nrql_alert_condition",
 		attributeName: "aggregation_window",
 		min:           30,
 		max:           900,
@@ -29,27 +29,27 @@ func NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule() *NrSyntheticsScr
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Name() string {
+func (r *NrNrqlAlerConditionInvalidAggregationWindowRule) Name() string {
 	return "nr_synthetics_script_monitor_invalid_aggregation_window"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Enabled() bool {
+func (r *NrNrqlAlerConditionInvalidAggregationWindowRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Severity() tflint.Severity {
+func (r *NrNrqlAlerConditionInvalidAggregationWindowRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Link() string {
+func (r *NrNrqlAlerConditionInvalidAggregationWindowRule) Link() string {
 	return project.ReferenceLink(r.Name())
 }
 
-// Check checks whether newrelic_synthetics_script_monitor has valid aggregation_window
-func (r *NrSyntheticsScriptMonitorInvalidAggregationWindowRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_nrql_alert_condition has valid aggregation_window
+func (r *NrNrqlAlerConditionInvalidAggregationWindowRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: r.attributeName},

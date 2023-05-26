@@ -6,42 +6,42 @@ import (
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
-// NrSyntheticsScriptMonitorInvalidSlidyByRule checks whether newrelic_synthetics_script_monitor has valid slidy_by
-type NrSyntheticsScriptMonitorInvalidSlidyByRule struct {
+// NrNrqlAlerConditionInvalidSlidyByRule checks whether newrelic_nrql_alert_condition has valid slidy_by
+type NrNrqlAlerConditionInvalidSlidyByRule struct {
 	tflint.DefaultRule
 
 	resourceType string
 }
 
-// NewNrSyntheticsScriptMonitorInvalidSlidyByRule returns a new rule
-func NewNrSyntheticsScriptMonitorInvalidSlidyByRule() *NrSyntheticsScriptMonitorInvalidSlidyByRule {
-	return &NrSyntheticsScriptMonitorInvalidSlidyByRule{
-		resourceType: "newrelic_synthetics_script_monitor",
+// NewNrNrqlAlerConditionInvalidSlidyByRule returns a new rule
+func NewNrNrqlAlerConditionInvalidSlidyByRule() *NrNrqlAlerConditionInvalidSlidyByRule {
+	return &NrNrqlAlerConditionInvalidSlidyByRule{
+		resourceType: "newrelic_nrql_alert_condition",
 	}
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Name() string {
+func (r *NrNrqlAlerConditionInvalidSlidyByRule) Name() string {
 	return "nr_synthetics_script_monitor_invalid_slidy_by"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Enabled() bool {
+func (r *NrNrqlAlerConditionInvalidSlidyByRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Severity() tflint.Severity {
+func (r *NrNrqlAlerConditionInvalidSlidyByRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Link() string {
+func (r *NrNrqlAlerConditionInvalidSlidyByRule) Link() string {
 	return project.ReferenceLink(r.Name())
 }
 
-// Check checks whether newrelic_synthetics_script_monitor has valid slidy_by
-func (r *NrSyntheticsScriptMonitorInvalidSlidyByRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_nrql_alert_condition has valid slidy_by
+func (r *NrNrqlAlerConditionInvalidSlidyByRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: "aggregation_window"},

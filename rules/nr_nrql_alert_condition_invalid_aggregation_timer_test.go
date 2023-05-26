@@ -7,7 +7,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrSyntheticsScriptMonitorInvalidAggregationDelayRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidAggregationTimerRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
@@ -16,15 +16,15 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationDelayRule(t *testing.T) {
 		{
 			Name: "issue found event_timer",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_method = "event_timer"
-  aggregation_delay = 60
+  aggregation_timer = 3601
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule(),
-					Message: "aggregation_delay invalid for aggregation_method 'event_timer'",
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerRule(),
+					Message: "'3601' is invalid aggregation_timer",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 24},
@@ -36,15 +36,15 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "issue found event_flow",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_method = "event_flow"
-  aggregation_delay = 1500
+  aggregation_timer = 60
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule(),
-					Message: "'1500' invalid aggregation_delay for aggregation_method 'event_flow'",
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerRule(),
+					Message: "aggregation_timer invalid for aggregation_method 'event_flow'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 24},
@@ -56,15 +56,15 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "issue found cadence",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_method = "cadence"
-  aggregation_delay = 3900
+  aggregation_timer = 60
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule(),
-					Message: "'3900' invalid aggregation_delay for aggregation_method 'cadence'",
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerRule(),
+					Message: "aggregation_timer invalid for aggregation_method 'cadence'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 24},
@@ -74,37 +74,27 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 			},
 		},
 		{
-			Name: "no issue found event_flow",
+			Name: "no issue found valid aggregation_timer",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
-  name = "My Monitor"
-  aggregation_method = "event_flow"
-  aggregation_delay = 600
-}`,
-			Expected: helper.Issues{},
-		},
-		{
-			Name: "no issue found cadence",
-			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
-  name = "My Monitor"
-  aggregation_method = "cadence"
-  aggregation_delay = 3600
-}`,
-			Expected: helper.Issues{},
-		},
-		{
-			Name: "no issue found aggregation_delay not set",
-			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_method = "event_timer"
+  aggregation_timer = 3600
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found aggregation_timer not set",
+			Content: `
+resource "newrelic_nrql_alert_condition" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "event_flow"
 }`,
 			Expected: helper.Issues{},
 		},
 	}
 
-	rule := NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule()
+	rule := NewNrNrqlAlerConditionInvalidAggregationTimerRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

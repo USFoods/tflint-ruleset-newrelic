@@ -5,15 +5,19 @@
 ## Example
 
 ```hcl
-resource "null_resource" "foo" {
-  // TODO: Write the example Terraform code which violates the rule
+resource "newrelic_alert_policy" "foo" {
+  name = "example"
+  incident_preference = "PER_ISSUE" // invalid value!
 }
 ```
 
 ```bash
 $ tflint
 
-// TODO: Write the output when inspects the above code
+Error: 'PER_ISSUE' is invalid value for incident_preference (nr_alert_policy_invalid_preference)
+
+  on main.tf line 17:
+  17:   incident_preference = "PER_ISSUE" // invalid value!
 
 ```
 

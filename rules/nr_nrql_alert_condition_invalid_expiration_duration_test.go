@@ -7,7 +7,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrSyntheticsScriptMonitorInvalidExpirationRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidExpirationRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
@@ -16,13 +16,13 @@ func TestNrSyntheticsScriptMonitorInvalidExpirationRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   expiration_duration = 0
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidExpirationDurationRule(),
+					Rule:    NewNrNrqlAlerConditionInvalidExpirationDurationRule(),
 					Message: "'0' is invalid expiration_duration",
 					Range: hcl.Range{
 						Filename: "resource.tf",
@@ -35,7 +35,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "no issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   expiration_duration = 900
 }`,
@@ -43,7 +43,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		},
 	}
 
-	rule := NewNrSyntheticsScriptMonitorInvalidExpirationDurationRule()
+	rule := NewNrNrqlAlerConditionInvalidExpirationDurationRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

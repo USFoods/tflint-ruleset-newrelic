@@ -7,7 +7,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrSyntheticsScriptMonitorInvalidSlideByRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidSlideByRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
@@ -16,14 +16,14 @@ func TestNrSyntheticsScriptMonitorInvalidSlideByRule(t *testing.T) {
 		{
 			Name: "issue found greater than",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_window = 60
   slide_by = 120
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidSlidyByRule(),
+					Rule:    NewNrNrqlAlerConditionInvalidSlidyByRule(),
 					Message: "slide_by is greater than aggregation_window",
 					Range: hcl.Range{
 						Filename: "resource.tf",
@@ -36,14 +36,14 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "issue found not a factor",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_window = 120
   slide_by = 45
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidSlidyByRule(),
+					Rule:    NewNrNrqlAlerConditionInvalidSlidyByRule(),
 					Message: "slide_by is not a factor of aggregation_window",
 					Range: hcl.Range{
 						Filename: "resource.tf",
@@ -56,7 +56,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "no issue found missing aggregation_window",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   slide_by = 60
 }`,
@@ -65,7 +65,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "no issue found missing slide_by",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_window = 60
 }`,
@@ -74,7 +74,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "no issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_window = 60
   slide_by = 30
@@ -83,7 +83,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		},
 	}
 
-	rule := NewNrSyntheticsScriptMonitorInvalidSlidyByRule()
+	rule := NewNrNrqlAlerConditionInvalidSlidyByRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

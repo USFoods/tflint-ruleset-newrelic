@@ -7,7 +7,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrSyntheticsScriptMonitorInvalidAggregationWindowRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidAggregationWindowRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
@@ -16,14 +16,14 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationWindowRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   type = "SCRIPT_API"
   aggregation_window = 10
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule(),
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationWindowRule(),
 					Message: "'10' is invalid aggregation_window",
 					Range: hcl.Range{
 						Filename: "resource.tf",
@@ -36,7 +36,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "no issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   type = "SCRIPT_API"
   aggregation_window = 60
@@ -45,7 +45,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		},
 	}
 
-	rule := NewNrSyntheticsScriptMonitorInvalidAggregationWindowRule()
+	rule := NewNrNrqlAlerConditionInvalidAggregationWindowRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

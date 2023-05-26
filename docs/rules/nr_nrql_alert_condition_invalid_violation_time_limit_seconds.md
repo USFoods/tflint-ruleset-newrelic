@@ -1,4 +1,4 @@
-# nr_alert_muting_rule_invalid_condition_operator_type
+# nr_nrql_alert_condition_invalid_violation_time_limit_seconds
 
 // TODO: Write the rule's description here
 

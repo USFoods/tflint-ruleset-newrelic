@@ -7,7 +7,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrSyntheticsScriptMonitorInvalidAggregationMethodRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidAggregationMethodRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
@@ -16,14 +16,14 @@ func TestNrSyntheticsScriptMonitorInvalidAggregationMethodRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   type = "SCRIPT_API"
   aggregation_method = "SUM"
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule(),
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationMethodRule(),
 					Message: "'SUM' is invalid aggregation method",
 					Range: hcl.Range{
 						Filename: "resource.tf",
@@ -36,7 +36,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "no issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   type = "SCRIPT_API"
   aggregation_method = "event_flow"
@@ -45,7 +45,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		},
 	}
 
-	rule := NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule()
+	rule := NewNrNrqlAlerConditionInvalidAggregationMethodRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

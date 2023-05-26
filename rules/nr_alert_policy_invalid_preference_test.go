@@ -22,7 +22,7 @@ resource "newrelic_alert_policy" "policy" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrAlertPolicyInvalidPreferenceRule(),
-					Message: "'PER_ISSUE' is invalid incident preference",
+					Message: "'PER_ISSUE' is invalid value for incident_preference",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 3, Column: 25},
@@ -32,10 +32,26 @@ resource "newrelic_alert_policy" "policy" {
 			},
 		},
 		{
-			Name: "no issue found",
+			Name: "no issue found PER_POLICY",
 			Content: `
 resource "newrelic_alert_policy" "policy" {
   incident_preference = "PER_POLICY"
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found PER_CONDITION",
+			Content: `
+resource "newrelic_alert_policy" "policy" {
+  incident_preference = "PER_CONDITION"
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found PER_CONDITION_AND_TARGET",
+			Content: `
+resource "newrelic_alert_policy" "policy" {
+  incident_preference = "PER_CONDITION_AND_TARGET"
 }`,
 			Expected: helper.Issues{},
 		},

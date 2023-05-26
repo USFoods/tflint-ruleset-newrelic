@@ -8,8 +8,8 @@ import (
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
-// NrSyntheticsScriptMonitorInvalidAggregationTimerRule checks whether newrelic_synthetics_script_monitor has valid aggregation timer
-type NrSyntheticsScriptMonitorInvalidAggregationTimerRule struct {
+// NrNrqlAlerConditionInvalidAggregationTimerRule checks whether newrelic_nrql_alert_condition has valid aggregation timer
+type NrNrqlAlerConditionInvalidAggregationTimerRule struct {
 	tflint.DefaultRule
 
 	resourceType string
@@ -17,37 +17,37 @@ type NrSyntheticsScriptMonitorInvalidAggregationTimerRule struct {
 	max          int
 }
 
-// NewNrSyntheticsScriptMonitorInvalidAggregationTimerRule returns a new rule
-func NewNrSyntheticsScriptMonitorInvalidAggregationTimerRule() *NrSyntheticsScriptMonitorInvalidAggregationTimerRule {
-	return &NrSyntheticsScriptMonitorInvalidAggregationTimerRule{
-		resourceType: "newrelic_synthetics_script_monitor",
+// NewNrNrqlAlerConditionInvalidAggregationTimerRule returns a new rule
+func NewNrNrqlAlerConditionInvalidAggregationTimerRule() *NrNrqlAlerConditionInvalidAggregationTimerRule {
+	return &NrNrqlAlerConditionInvalidAggregationTimerRule{
+		resourceType: "newrelic_nrql_alert_condition",
 		min:          0,
 		max:          3600,
 	}
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsScriptMonitorInvalidAggregationTimerRule) Name() string {
+func (r *NrNrqlAlerConditionInvalidAggregationTimerRule) Name() string {
 	return "nr_synthetics_script_monitor_invalid_aggregation_timer"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsScriptMonitorInvalidAggregationTimerRule) Enabled() bool {
+func (r *NrNrqlAlerConditionInvalidAggregationTimerRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsScriptMonitorInvalidAggregationTimerRule) Severity() tflint.Severity {
+func (r *NrNrqlAlerConditionInvalidAggregationTimerRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsScriptMonitorInvalidAggregationTimerRule) Link() string {
+func (r *NrNrqlAlerConditionInvalidAggregationTimerRule) Link() string {
 	return project.ReferenceLink(r.Name())
 }
 
-// Check checks whether newrelic_synthetics_script_monitor has valid aggregation timer
-func (r *NrSyntheticsScriptMonitorInvalidAggregationTimerRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_nrql_alert_condition has valid aggregation timer
+func (r *NrNrqlAlerConditionInvalidAggregationTimerRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: "aggregation_method"},

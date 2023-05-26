@@ -8,8 +8,8 @@ import (
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
-// NrSyntheticsScriptMonitorInvalidPeriodRule checks whether newrelic_synthetics_script_monitor has valid period
-type NrSyntheticsScriptMonitorInvalidPeriodRule struct {
+// NrNrqlAlerConditionInvalidPeriodRule checks whether newrelic_nrql_alert_condition has valid period
+type NrNrqlAlerConditionInvalidPeriodRule struct {
 	tflint.DefaultRule
 
 	resourceType  string
@@ -17,10 +17,10 @@ type NrSyntheticsScriptMonitorInvalidPeriodRule struct {
 	periods       map[string]bool
 }
 
-// NewNrSyntheticsScriptMonitorInvalidPeriodRule returns a new rule
-func NewNrSyntheticsScriptMonitorInvalidPeriodRule() *NrSyntheticsScriptMonitorInvalidPeriodRule {
-	return &NrSyntheticsScriptMonitorInvalidPeriodRule{
-		resourceType:  "newrelic_synthetics_script_monitor",
+// NewNrNrqlAlerConditionInvalidPeriodRule returns a new rule
+func NewNrNrqlAlerConditionInvalidPeriodRule() *NrNrqlAlerConditionInvalidPeriodRule {
+	return &NrNrqlAlerConditionInvalidPeriodRule{
+		resourceType:  "newrelic_nrql_alert_condition",
 		attributeName: "period",
 		periods: map[string]bool{
 			"EVERY_MINUTE":     true,
@@ -37,27 +37,27 @@ func NewNrSyntheticsScriptMonitorInvalidPeriodRule() *NrSyntheticsScriptMonitorI
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Name() string {
+func (r *NrNrqlAlerConditionInvalidPeriodRule) Name() string {
 	return "nr_synthetics_script_monitor_invalid_period"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Enabled() bool {
+func (r *NrNrqlAlerConditionInvalidPeriodRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Severity() tflint.Severity {
+func (r *NrNrqlAlerConditionInvalidPeriodRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Link() string {
+func (r *NrNrqlAlerConditionInvalidPeriodRule) Link() string {
 	return project.ReferenceLink(r.Name())
 }
 
-// Check checks whether newrelic_synthetics_script_monitor has valid period
-func (r *NrSyntheticsScriptMonitorInvalidPeriodRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_nrql_alert_condition has valid period
+func (r *NrNrqlAlerConditionInvalidPeriodRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: r.attributeName},

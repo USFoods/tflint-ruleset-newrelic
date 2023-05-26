@@ -14,7 +14,7 @@ func Test{{ .RuleNameCC }}(t *testing.T) {
 		Expected helper.Issues
 	}{
 		{
-			Name: "basic",
+			Name: "issue found",
 			Content: `
 resource "null_resource" "null" {
 }
@@ -30,6 +30,14 @@ resource "null_resource" "null" {
 					},
 				},
 			},
+		},
+		{
+			Name: "no issue found",
+			Content: `
+resource "null_resource" "null" {
+}
+`,
+			Expected: helper.Issues{},
 		},
 	}
 

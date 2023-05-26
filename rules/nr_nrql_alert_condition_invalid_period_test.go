@@ -7,7 +7,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrSyntheticsScriptMonitorInvalidPeriodRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidPeriodRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
@@ -16,14 +16,14 @@ func TestNrSyntheticsScriptMonitorInvalidPeriodRule(t *testing.T) {
 		{
 			Name: "issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   type = "SCRIPT_API"
   period = 60
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrSyntheticsScriptMonitorInvalidPeriodRule(),
+					Rule:    NewNrNrqlAlerConditionInvalidPeriodRule(),
 					Message: "'60' is invalid period",
 					Range: hcl.Range{
 						Filename: "resource.tf",
@@ -36,7 +36,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		{
 			Name: "no issue found",
 			Content: `
-resource "newrelic_synthetics_script_monitor" "monitor" {
+resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   type = "SCRIPT_API"
   period = "EVERY_MINUTE"
@@ -45,7 +45,7 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 		},
 	}
 
-	rule := NewNrSyntheticsScriptMonitorInvalidPeriodRule()
+	rule := NewNrNrqlAlerConditionInvalidPeriodRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

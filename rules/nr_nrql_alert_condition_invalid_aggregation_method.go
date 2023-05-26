@@ -8,8 +8,8 @@ import (
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
-// NrSyntheticsScriptMonitorInvalidAggregationMethodRule checks whether newrelic_synthetics_script_monitor has valid aggregation_method
-type NrSyntheticsScriptMonitorInvalidAggregationMethodRule struct {
+// NrNrqlAlerConditionInvalidAggregationMethodRule checks whether newrelic_nrql_alert_condition has valid aggregation_method
+type NrNrqlAlerConditionInvalidAggregationMethodRule struct {
 	tflint.DefaultRule
 
 	resourceType       string
@@ -17,10 +17,10 @@ type NrSyntheticsScriptMonitorInvalidAggregationMethodRule struct {
 	aggregationMethods map[string]bool
 }
 
-// NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule returns a new rule
-func NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule() *NrSyntheticsScriptMonitorInvalidAggregationMethodRule {
-	return &NrSyntheticsScriptMonitorInvalidAggregationMethodRule{
-		resourceType:  "newrelic_synthetics_script_monitor",
+// NewNrNrqlAlerConditionInvalidAggregationMethodRule returns a new rule
+func NewNrNrqlAlerConditionInvalidAggregationMethodRule() *NrNrqlAlerConditionInvalidAggregationMethodRule {
+	return &NrNrqlAlerConditionInvalidAggregationMethodRule{
+		resourceType:  "newrelic_nrql_alert_condition",
 		attributeName: "aggregation_method",
 		aggregationMethods: map[string]bool{
 			"cadence":     true,
@@ -31,27 +31,27 @@ func NewNrSyntheticsScriptMonitorInvalidAggregationMethodRule() *NrSyntheticsScr
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Name() string {
+func (r *NrNrqlAlerConditionInvalidAggregationMethodRule) Name() string {
 	return "nr_synthetics_script_monitor_invalid_aggregation_method"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Enabled() bool {
+func (r *NrNrqlAlerConditionInvalidAggregationMethodRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Severity() tflint.Severity {
+func (r *NrNrqlAlerConditionInvalidAggregationMethodRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Link() string {
+func (r *NrNrqlAlerConditionInvalidAggregationMethodRule) Link() string {
 	return project.ReferenceLink(r.Name())
 }
 
-// Check checks whether newrelic_synthetics_script_monitor has valid aggregation_method
-func (r *NrSyntheticsScriptMonitorInvalidAggregationMethodRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_nrql_alert_condition has valid aggregation_method
+func (r *NrNrqlAlerConditionInvalidAggregationMethodRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: r.attributeName},

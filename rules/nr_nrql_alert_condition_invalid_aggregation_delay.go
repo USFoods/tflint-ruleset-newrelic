@@ -8,42 +8,42 @@ import (
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
-// NrSyntheticsScriptMonitorInvalidAggregationDelayRule checks whether newrelic_synthetics_monitor has valid aggregation_delay
-type NrSyntheticsScriptMonitorInvalidAggregationDelayRule struct {
+// NrNrqlAlerConditionInvalidAggregationDelayRule checks whether newrelic_synthetics_monitor has valid aggregation_delay
+type NrNrqlAlerConditionInvalidAggregationDelayRule struct {
 	tflint.DefaultRule
 
 	resourceType string
 }
 
-// NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule returns a new rule
-func NewNrSyntheticsScriptMonitorInvalidAggregationDelayRule() *NrSyntheticsScriptMonitorInvalidAggregationDelayRule {
-	return &NrSyntheticsScriptMonitorInvalidAggregationDelayRule{
-		resourceType: "newrelic_synthetics_script_monitor",
+// NewNrNrqlAlerConditionInvalidAggregationDelayRule returns a new rule
+func NewNrNrqlAlerConditionInvalidAggregationDelayRule() *NrNrqlAlerConditionInvalidAggregationDelayRule {
+	return &NrNrqlAlerConditionInvalidAggregationDelayRule{
+		resourceType: "newrelic_nrql_alert_condition",
 	}
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Name() string {
+func (r *NrNrqlAlerConditionInvalidAggregationDelayRule) Name() string {
 	return "nr_synthetics_script_monitor_invalid_aggregation_delay"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Enabled() bool {
+func (r *NrNrqlAlerConditionInvalidAggregationDelayRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Severity() tflint.Severity {
+func (r *NrNrqlAlerConditionInvalidAggregationDelayRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Link() string {
+func (r *NrNrqlAlerConditionInvalidAggregationDelayRule) Link() string {
 	return project.ReferenceLink(r.Name())
 }
 
-// Check checks whether newrelic_synthetics_script_monitor has valid aggregation_delay
-func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_nrql_alert_condition has valid aggregation_delay
+func (r *NrNrqlAlerConditionInvalidAggregationDelayRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: "aggregation_method"},
@@ -85,7 +85,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tfli
 		if aggregationMethod == "event_timer" {
 			return runner.EmitIssue(
 				r,
-				fmt.Sprintf("aggregation_delay invalid for aggregation_method '%s'", aggregationMethod),
+				fmt.Sprintf("aggregation_delay invalid attribute with aggregation_method '%s'", aggregationMethod),
 				attr.Expr.Range(),
 			)
 		}
@@ -94,7 +94,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tfli
 			if aggregationDelay > 1200 {
 				return runner.EmitIssue(
 					r,
-					fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
+					fmt.Sprintf("'%d' invalid value for aggregation_delay with aggregation_method '%s'", aggregationDelay, aggregationMethod),
 					attr.Expr.Range(),
 				)
 			}
@@ -104,7 +104,7 @@ func (r *NrSyntheticsScriptMonitorInvalidAggregationDelayRule) Check(runner tfli
 			if aggregationDelay > 3600 {
 				return runner.EmitIssue(
 					r,
-					fmt.Sprintf("'%d' invalid aggregation_delay for aggregation_method '%s'", aggregationDelay, aggregationMethod),
+					fmt.Sprintf("'%d' invalid value for aggregation_delay with aggregation_method '%s'", aggregationDelay, aggregationMethod),
 					attr.Expr.Range(),
 				)
 			}

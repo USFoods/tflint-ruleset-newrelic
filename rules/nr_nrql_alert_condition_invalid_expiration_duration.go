@@ -8,44 +8,44 @@ import (
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
-// NrSyntheticsScriptMonitorInvalidExpirationDurationRule checks whether newrelic_synthetics_script_monitor has valid expiration_duration
-type NrSyntheticsScriptMonitorInvalidExpirationDurationRule struct {
+// NrNrqlAlerConditionInvalidExpirationDurationRule checks whether newrelic_nrql_alert_condition has valid expiration_duration
+type NrNrqlAlerConditionInvalidExpirationDurationRule struct {
 	tflint.DefaultRule
 
 	resourceType  string
 	attributeName string
 }
 
-// NewNrSyntheticsScriptMonitorInvalidExpirationDurationRule returns a new rule
-func NewNrSyntheticsScriptMonitorInvalidExpirationDurationRule() *NrSyntheticsScriptMonitorInvalidExpirationDurationRule {
-	return &NrSyntheticsScriptMonitorInvalidExpirationDurationRule{
-		resourceType:  "newrelic_synthetics_script_monitor",
+// NewNrNrqlAlerConditionInvalidExpirationDurationRule returns a new rule
+func NewNrNrqlAlerConditionInvalidExpirationDurationRule() *NrNrqlAlerConditionInvalidExpirationDurationRule {
+	return &NrNrqlAlerConditionInvalidExpirationDurationRule{
+		resourceType:  "newrelic_nrql_alert_condition",
 		attributeName: "expiration_duration",
 	}
 }
 
 // Name returns the rule name
-func (r *NrSyntheticsScriptMonitorInvalidExpirationDurationRule) Name() string {
+func (r *NrNrqlAlerConditionInvalidExpirationDurationRule) Name() string {
 	return "nr_synthetics_script_monitor_invalid_expiration_duration"
 }
 
 // Enabled returns whether the rule is enabled by default
-func (r *NrSyntheticsScriptMonitorInvalidExpirationDurationRule) Enabled() bool {
+func (r *NrNrqlAlerConditionInvalidExpirationDurationRule) Enabled() bool {
 	return true
 }
 
 // Severity returns the rule severity
-func (r *NrSyntheticsScriptMonitorInvalidExpirationDurationRule) Severity() tflint.Severity {
+func (r *NrNrqlAlerConditionInvalidExpirationDurationRule) Severity() tflint.Severity {
 	return tflint.ERROR
 }
 
 // Link returns the rule reference link
-func (r *NrSyntheticsScriptMonitorInvalidExpirationDurationRule) Link() string {
+func (r *NrNrqlAlerConditionInvalidExpirationDurationRule) Link() string {
 	return project.ReferenceLink(r.Name())
 }
 
-// Check checks whether newrelic_synthetics_script_monitor has valid expiration_duration
-func (r *NrSyntheticsScriptMonitorInvalidExpirationDurationRule) Check(runner tflint.Runner) error {
+// Check checks whether newrelic_nrql_alert_condition has valid expiration_duration
+func (r *NrNrqlAlerConditionInvalidExpirationDurationRule) Check(runner tflint.Runner) error {
 	resources, err := runner.GetResourceContent(r.resourceType, &hclext.BodySchema{
 		Attributes: []hclext.AttributeSchema{
 			{Name: r.attributeName},
