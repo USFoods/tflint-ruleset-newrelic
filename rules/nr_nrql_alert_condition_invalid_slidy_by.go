@@ -1,9 +1,13 @@
 package rules
 
 import (
+	"fmt"
+
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
+	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/gocty"
 )
 
 // NrNrqlAlerConditionInvalidSlidyByRule checks whether newrelic_nrql_alert_condition has valid slidy_by
@@ -54,54 +58,47 @@ func (r *NrNrqlAlerConditionInvalidSlidyByRule) Check(runner tflint.Runner) erro
 	}
 
 	for _, resource := range resources.Blocks {
+		slideByAttr, slideByExists := resource.Body.Attributes["slide_by"]
+		windowsAttr, windowExists := resource.Body.Attributes["aggregation_window"]
 
-		attr, ok := resource.Body.Attributes["slide_by"]
+		if !slideByExists || !windowExists {
+			continue
+		}
 
-		if !ok {
+		var slideByCty cty.Value
+
+		if err := runner.EvaluateExpr(slideByAttr.Expr, &slideByCty, nil); err != nil {
+			return err
+		}
+
+		if slideByCty.IsNull() || !slideByCty.IsKnown() {
 			continue
 		}
 
 		var slideBy int
-		err := runner.EvaluateExpr(attr.Expr, &slideBy, nil)
-
-		if err != nil {
+		if err := gocty.FromCtyValue(slideByCty, &slideBy); err != nil {
 			return err
 		}
 
-		attr, ok = resource.Body.Attributes["aggregation_window"]
-
-		if !ok {
-			continue
-		}
-
-		var aggregationWindow int
-		err = runner.EvaluateExpr(attr.Expr, &aggregationWindow, nil)
-
-		if err != nil {
+		var windowCty cty.Value
+		if err := runner.EvaluateExpr(windowsAttr.Expr, &windowCty, nil); err != nil {
 			return err
 		}
 
-		attr, exists := resource.Body.Attributes["aggregation_window"]
-
-		if !exists {
-			continue
+		// Default window for aggregation_window is 60
+		aggregationWindow := 60
+		if !windowCty.IsNull() && windowCty.IsKnown() {
+			if err := gocty.FromCtyValue(windowCty, &aggregationWindow); err != nil {
+				return err
+			}
 		}
 
 		// slide_by must be less than aggregation_window
-		if slideBy > aggregationWindow {
+		if slideBy > aggregationWindow || aggregationWindow%slideBy != 0 {
 			return runner.EmitIssue(
 				r,
-				"slide_by is greater than aggregation_window",
-				attr.Expr.Range(),
-			)
-		}
-
-		// slide_by must be a factor of aggregation_window
-		if aggregationWindow%slideBy != 0 {
-			return runner.EmitIssue(
-				r,
-				"slide_by is not a factor of aggregation_window",
-				attr.Expr.Range(),
+				fmt.Sprintf("'%d' is invalid value for slide_by", slideBy),
+				slideByAttr.Expr.Range(),
 			)
 		}
 	}

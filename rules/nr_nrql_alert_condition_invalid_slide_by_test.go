@@ -24,11 +24,11 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlerConditionInvalidSlidyByRule(),
-					Message: "slide_by is greater than aggregation_window",
+					Message: "'120' is invalid value for slide_by",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 4, Column: 24},
-						End:      hcl.Pos{Line: 4, Column: 26},
+						Start:    hcl.Pos{Line: 5, Column: 14},
+						End:      hcl.Pos{Line: 5, Column: 17},
 					},
 				},
 			},
@@ -44,11 +44,11 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlerConditionInvalidSlidyByRule(),
-					Message: "slide_by is not a factor of aggregation_window",
+					Message: "'45' is invalid value for slide_by",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 4, Column: 24},
-						End:      hcl.Pos{Line: 4, Column: 27},
+						Start:    hcl.Pos{Line: 5, Column: 14},
+						End:      hcl.Pos{Line: 5, Column: 16},
 					},
 				},
 			},
@@ -78,6 +78,16 @@ resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   aggregation_window = 60
   slide_by = 30
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found null",
+			Content: `
+resource "newrelic_nrql_alert_condition" "monitor" {
+  name = "My Monitor"
+  aggregation_window = 60
+  slide_by = null
 }`,
 			Expected: helper.Issues{},
 		},

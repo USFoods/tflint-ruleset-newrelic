@@ -23,7 +23,7 @@ resource "newrelic_nrql_alert_condition" "condition" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlertConditionInvalidTypeRule(),
-					Message: "'BASIC' is invalid condition type",
+					Message: "'BASIC' is invalid value for type",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 10},

@@ -7,32 +7,12 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrNrqlAlerConditionInvalidAggregationTimerRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidAggregationTimerMethodRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
 		Expected helper.Issues
 	}{
-		{
-			Name: "issue found event_timer",
-			Content: `
-resource "newrelic_nrql_alert_condition" "monitor" {
-  name = "My Monitor"
-  aggregation_method = "event_timer"
-  aggregation_timer = 3601
-}`,
-			Expected: helper.Issues{
-				{
-					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerRule(),
-					Message: "'3601' is invalid aggregation_timer",
-					Range: hcl.Range{
-						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 4, Column: 24},
-						End:      hcl.Pos{Line: 4, Column: 37},
-					},
-				},
-			},
-		},
 		{
 			Name: "issue found event_flow",
 			Content: `
@@ -43,12 +23,31 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerRule(),
-					Message: "aggregation_timer invalid for aggregation_method 'event_flow'",
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerMethodRule(),
+					Message: "aggregation_timer is invalid attribute for aggregation_method 'event_flow'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 24},
 						End:      hcl.Pos{Line: 4, Column: 36},
+					},
+				},
+			},
+		},
+		{
+			Name: "issue found method omitted",
+			Content: `
+resource "newrelic_nrql_alert_condition" "monitor" {
+  name = "My Monitor"
+  aggregation_timer = 60
+}`,
+			Expected: helper.Issues{
+				{
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerMethodRule(),
+					Message: "aggregation_timer is invalid attribute for aggregation_method 'event_flow'",
+					Range: hcl.Range{
+						Filename: "resource.tf",
+						Start:    hcl.Pos{Line: 0, Column: 0},
+						End:      hcl.Pos{Line: 0, Column: 0},
 					},
 				},
 			},
@@ -63,8 +62,8 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerRule(),
-					Message: "aggregation_timer invalid for aggregation_method 'cadence'",
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerMethodRule(),
+					Message: "aggregation_timer is invalid attribute for aggregation_method 'cadence'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 24},
@@ -94,7 +93,7 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 		},
 	}
 
-	rule := NewNrNrqlAlerConditionInvalidAggregationTimerRule()
+	rule := NewNrNrqlAlerConditionInvalidAggregationTimerMethodRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

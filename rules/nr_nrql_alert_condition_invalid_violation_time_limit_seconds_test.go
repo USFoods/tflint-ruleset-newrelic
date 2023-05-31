@@ -24,7 +24,7 @@ resource "newrelic_nrql_alert_condition" "condition" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlertConditionInvalidViolationTimeLimitSecondsRule(),
-					Message: "'120' is not a valid violation time limit",
+					Message: "'120' is an invalid value for violation_time_limit_seconds",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 5, Column: 34},
@@ -44,7 +44,7 @@ resource "newrelic_nrql_alert_condition" "condition" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlertConditionInvalidViolationTimeLimitSecondsRule(),
-					Message: "'2592001' is not a valid violation time limit",
+					Message: "'2592001' is an invalid value for violation_time_limit_seconds",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 5, Column: 34},

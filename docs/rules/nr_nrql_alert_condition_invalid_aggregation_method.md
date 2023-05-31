@@ -5,15 +5,42 @@
 ## Example
 
 ```hcl
-resource "null_resource" "foo" {
-  // TODO: Write the example Terraform code which violates the rule
+resource "newrelic_alert_policy" "foo" {
+  name                = "example"
+  incident_preference = "PER_POLICY"
+}
+
+resource "newrelic_nrql_alert_condition" "foo" {
+  account_id         = var.account_id
+  policy_id          = newrelic_alert_policy.foo.id
+  type               = "static"
+  name               = "foo"
+  description        = "Alert when transactions are taking too long"
+  runbook_url        = "https://www.example.com"
+  enabled            = var.enabled
+  aggregation_window = 60
+  aggregation_method = "cadence_flow" // invalid value!
+
+  nrql {
+    query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 5.5
+    threshold_duration    = 300
+    threshold_occurrences = "ALL"
+  }
 }
 ```
 
 ```bash
 $ tflint
 
-// TODO: Write the output when inspects the above code
+Error: 'cadence_flow' is invalid aggregation method (nr_synthetics_script_monitor_invalid_aggregation_method)
+
+  on main.tf line 29:
+  29:   aggregation_method = "cadence_flow" // invalid value!
 
 ```
 

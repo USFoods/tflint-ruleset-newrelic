@@ -1,4 +1,4 @@
-# nr_synthetics_script_monitor_invalid_aggregation_window
+# nr_synthetics_script_monitor_invalid_aggregation_timer
 
 // TODO: Write the rule's description here
 
@@ -18,8 +18,9 @@ resource "newrelic_nrql_alert_condition" "foo" {
   description        = "Alert when transactions are taking too long"
   runbook_url        = "https://www.example.com"
   enabled            = var.enabled
-  aggregation_window = 1800 // invalid value!
-  aggregation_method = "event_flow" 
+  aggregation_window = 60
+  aggregation_method = "event_timer" 
+  aggregation_timer = 7200 // invalid value!
 
   nrql {
     query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
@@ -37,10 +38,10 @@ resource "newrelic_nrql_alert_condition" "foo" {
 ```bash
 $ tflint
 
-Error: '1800' is invalid value for aggregation_window (nr_synthetics_script_monitor_invalid_aggregation_window)
+Error: '7200' is invalid value for aggregation_timer (nr_synthetics_script_monitor_invalid_aggregation_timer_value)
 
-  on main.tf line 28:
-  28:   aggregation_window = 1800 // invalid value!
+  on main.tf line 29:
+  29:   aggregation_method = "event_timer" 
 
 ```
 

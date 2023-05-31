@@ -24,7 +24,7 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlertConditionInvalidAggregationDelayEventTimerRule(),
-					Message: "aggregation_delay invalid attribute with aggregation_method 'event_timer'",
+					Message: "aggregation_delay is invalid attribute with aggregation_method 'event_timer'",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 24},

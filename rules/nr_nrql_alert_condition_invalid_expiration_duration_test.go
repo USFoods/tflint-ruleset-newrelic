@@ -14,20 +14,39 @@ func TestNrNrqlAlerConditionInvalidExpirationRule(t *testing.T) {
 		Expected helper.Issues
 	}{
 		{
-			Name: "issue found",
+			Name: "issue found max",
 			Content: `
 resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
-  expiration_duration = 0
+  expiration_duration = 172801
 }`,
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlerConditionInvalidExpirationDurationRule(),
-					Message: "'0' is invalid expiration_duration",
+					Message: "'172801' is invalid value for expiration_duration",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 25},
-						End:      hcl.Pos{Line: 4, Column: 26},
+						End:      hcl.Pos{Line: 4, Column: 31},
+					},
+				},
+			},
+		},
+		{
+			Name: "issue found min",
+			Content: `
+resource "newrelic_nrql_alert_condition" "monitor" {
+  name = "My Monitor"
+  expiration_duration = 10
+}`,
+			Expected: helper.Issues{
+				{
+					Rule:    NewNrNrqlAlerConditionInvalidExpirationDurationRule(),
+					Message: "'10' is invalid value for expiration_duration",
+					Range: hcl.Range{
+						Filename: "resource.tf",
+						Start:    hcl.Pos{Line: 4, Column: 25},
+						End:      hcl.Pos{Line: 4, Column: 27},
 					},
 				},
 			},
@@ -38,6 +57,15 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
   expiration_duration = 900
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found",
+			Content: `
+resource "newrelic_nrql_alert_condition" "monitor" {
+  name = "My Monitor"
+  expiration_duration = null
 }`,
 			Expected: helper.Issues{},
 		},

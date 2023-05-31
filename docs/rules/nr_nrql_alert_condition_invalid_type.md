@@ -5,15 +5,43 @@
 ## Example
 
 ```hcl
-resource "null_resource" "foo" {
-  // TODO: Write the example Terraform code which violates the rule
+resource "newrelic_alert_policy" "foo" {
+  name                = "example"
+  incident_preference = "PER_POLICY"
+}
+
+resource "newrelic_nrql_alert_condition" "foo" {
+  account_id         = var.account_id
+  policy_id          = newrelic_alert_policy.foo.id
+  type               = "basic" // invalid value!
+  name               = "foo"
+  description        = "Alert when transactions are taking too long"
+  runbook_url        = "https://www.example.com"
+  enabled            = var.enabled
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay  = 30
+
+  nrql {
+    query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 5.5
+    threshold_duration    = 300
+    threshold_occurrences = "ALL"
+  }
 }
 ```
 
 ```bash
 $ tflint
 
-// TODO: Write the output when inspects the above code
+Error: 'basic' is invalid condition type (nr_nrql_alert_condition_invalid_type)
+
+  on main.tf line 23:
+  23:   type               = "basic" // invalid value!
 
 ```
 

@@ -7,45 +7,54 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/helper"
 )
 
-func TestNrNrqlAlerConditionInvalidPeriodRule(t *testing.T) {
+func TestNrNrqlAlerConditionInvalidAggregationTimerValueRule(t *testing.T) {
 	tests := []struct {
 		Name     string
 		Content  string
 		Expected helper.Issues
 	}{
 		{
-			Name: "issue found",
+			Name: "issue found event_timer",
 			Content: `
 resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
-  type = "SCRIPT_API"
-  period = 60
+  aggregation_method = "event_timer"
+  aggregation_timer = 3601
 }`,
 			Expected: helper.Issues{
 				{
-					Rule:    NewNrNrqlAlerConditionInvalidPeriodRule(),
-					Message: "'60' is invalid period",
+					Rule:    NewNrNrqlAlerConditionInvalidAggregationTimerValueRule(),
+					Message: "'3601' is invalid value for aggregation_timer",
 					Range: hcl.Range{
 						Filename: "resource.tf",
-						Start:    hcl.Pos{Line: 5, Column: 12},
-						End:      hcl.Pos{Line: 5, Column: 14},
+						Start:    hcl.Pos{Line: 4, Column: 24},
+						End:      hcl.Pos{Line: 4, Column: 37},
 					},
 				},
 			},
 		},
 		{
-			Name: "no issue found",
+			Name: "no issue found valid aggregation_timer",
 			Content: `
 resource "newrelic_nrql_alert_condition" "monitor" {
   name = "My Monitor"
-  type = "SCRIPT_API"
-  period = "EVERY_MINUTE"
+  aggregation_method = "event_timer"
+  aggregation_timer = 3600
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found aggregation_timer not set",
+			Content: `
+resource "newrelic_nrql_alert_condition" "monitor" {
+  name = "My Monitor"
+  aggregation_method = "event_flow"
 }`,
 			Expected: helper.Issues{},
 		},
 	}
 
-	rule := NewNrNrqlAlerConditionInvalidPeriodRule()
+	rule := NewNrNrqlAlerConditionInvalidAggregationTimerValueRule()
 
 	for _, test := range tests {
 		runner := helper.TestRunner(t, map[string]string{"resource.tf": test.Content})

@@ -43,6 +43,16 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 }`,
 			Expected: helper.Issues{},
 		},
+		{
+			Name: "no issue found null",
+			Content: `
+resource "newrelic_nrql_alert_condition" "monitor" {
+  name = "My Monitor"
+  type = "SCRIPT_API"
+  aggregation_method = null
+}`,
+			Expected: helper.Issues{},
+		},
 	}
 
 	rule := NewNrNrqlAlerConditionInvalidAggregationMethodRule()

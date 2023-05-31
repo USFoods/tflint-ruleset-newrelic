@@ -6,6 +6,8 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
+	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/gocty"
 )
 
 // NrNrqlAlerConditionInvalidAggregationWindowRule checks whether newrelic_nrql_alert_condition has valid aggregation_window
@@ -67,20 +69,26 @@ func (r *NrNrqlAlerConditionInvalidAggregationWindowRule) Check(runner tflint.Ru
 			continue
 		}
 
-		err := runner.EvaluateExpr(attribute.Expr, func(aggregationWindow int) error {
-			if aggregationWindow < r.min || aggregationWindow > r.max {
-				return runner.EmitIssue(
-					r,
-					fmt.Sprintf("'%d' is invalid aggregation_window", aggregationWindow),
-					attribute.Expr.Range(),
-				)
-			}
-
-			return nil
-		}, nil)
-
-		if err != nil {
+		var attrCty cty.Value
+		if err := runner.EvaluateExpr(attribute.Expr, &attrCty, nil); err != nil {
 			return err
+		}
+
+		if attrCty.IsNull() || !attrCty.IsKnown() {
+			continue
+		}
+
+		var aggregationWindow int
+		if err := gocty.FromCtyValue(attrCty, &aggregationWindow); err != nil {
+			return err
+		}
+
+		if aggregationWindow < r.min || aggregationWindow > r.max {
+			return runner.EmitIssue(
+				r,
+				fmt.Sprintf("'%d' is invalid value for aggregation_window", aggregationWindow),
+				attribute.Expr.Range(),
+			)
 		}
 	}
 

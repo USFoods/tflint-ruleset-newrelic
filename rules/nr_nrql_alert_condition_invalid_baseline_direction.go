@@ -7,6 +7,8 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
+	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/gocty"
 )
 
 // TODO: Write the rule's description here
@@ -72,25 +74,32 @@ func (r *NrNrqlAlertConditionInvalidBaselineDirectionRule) Check(runner tflint.R
 	}
 
 	for _, resource := range resources.Blocks {
-		attribute, exists := resource.Body.Attributes[r.attributeName]
+		directionAttr, directionExists := resource.Body.Attributes[r.attributeName]
 
-		if !exists {
+		if !directionExists {
 			continue
 		}
 
-		err := runner.EvaluateExpr(attribute.Expr, func(direction string) error {
-			if !r.baselineDirections[strings.ToLower(direction)] {
-				runner.EmitIssue(
-					r,
-					fmt.Sprintf("'%s' is not a valid baseline direction", direction),
-					attribute.Expr.Range(),
-				)
-			}
-			return nil
-		}, nil)
-
-		if err != nil {
+		var directionCty cty.Value
+		if err := runner.EvaluateExpr(directionAttr.Expr, &directionCty, nil); err != nil {
 			return err
+		}
+
+		if directionCty.IsNull() || !directionCty.IsKnown() {
+			continue
+		}
+
+		var baselineDirection string
+		if err := gocty.FromCtyValue(directionCty, &baselineDirection); err != nil {
+			return err
+		}
+
+		if !r.baselineDirections[strings.ToLower(baselineDirection)] {
+			runner.EmitIssue(
+				r,
+				fmt.Sprintf("'%s' is invalid value for baseline_direction", baselineDirection),
+				directionAttr.Expr.Range(),
+			)
 		}
 	}
 

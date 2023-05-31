@@ -24,7 +24,7 @@ resource "newrelic_nrql_alert_condition" "condition" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlertConditionInvalidBaselineDirectionRule(),
-					Message: "'JUST_UPPER' is not a valid baseline direction",
+					Message: "'JUST_UPPER' is invalid value for baseline_direction",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 5, Column: 24},
@@ -60,6 +60,16 @@ resource "newrelic_nrql_alert_condition" "condition" {
   name = "My NRQL Alert Condition"
   type = "baseline"
   baseline_direction = "upper_and_lower"
+}`,
+			Expected: helper.Issues{},
+		},
+		{
+			Name: "no issue found null",
+			Content: `
+resource "newrelic_nrql_alert_condition" "condition" {
+  name = "My NRQL Alert Condition"
+  type = "baseline"
+  baseline_direction = null
 }`,
 			Expected: helper.Issues{},
 		},

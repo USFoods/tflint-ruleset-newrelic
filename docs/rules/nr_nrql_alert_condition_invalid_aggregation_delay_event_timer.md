@@ -39,7 +39,7 @@ resource "newrelic_nrql_alert_condition" "foo" {
 ```bash
 $ tflint
 
-Error: aggregation_delay invalid attribute with aggregation_method 'event_timer' (nr_synthetics_script_monitor_invalid_aggregation_delay)
+Error: aggregation_delay is invalid attribute with aggregation_method 'event_timer' (nr_synthetics_script_monitor_invalid_aggregation_delay)
 
   on main.tf line 29:
   29:   aggregation_method = "event_timer"

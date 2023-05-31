@@ -6,6 +6,7 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
+	"github.com/zclconf/go-cty/cty"
 )
 
 // TODO: Write the rule's description here
@@ -75,19 +76,26 @@ func (r *NrNrqlAlertConditionInvalidViolationTimeLimitSecondsRule) Check(runner 
 			continue
 		}
 
-		err := runner.EvaluateExpr(attribute.Expr, func(timeLimit int) error {
-			if timeLimit < r.min || timeLimit > r.max {
-				runner.EmitIssue(
-					r,
-					fmt.Sprintf("'%d' is not a valid violation time limit", timeLimit),
-					attribute.Expr.Range(),
-				)
-			}
-			return nil
-		}, nil)
-
-		if err != nil {
+		var attrCty cty.Value
+		if err := runner.EvaluateExpr(attribute.Expr, &attrCty, nil); err != nil {
 			return err
+		}
+
+		if attrCty.IsNull() || !attrCty.IsKnown() {
+			continue
+		}
+
+		var timeLimit int
+		if err := runner.EvaluateExpr(attribute.Expr, &timeLimit, nil); err != nil {
+			return err
+		}
+
+		if timeLimit < r.min || timeLimit > r.max {
+			runner.EmitIssue(
+				r,
+				fmt.Sprintf("'%d' is an invalid value for violation_time_limit_seconds", timeLimit),
+				attribute.Expr.Range(),
+			)
 		}
 	}
 

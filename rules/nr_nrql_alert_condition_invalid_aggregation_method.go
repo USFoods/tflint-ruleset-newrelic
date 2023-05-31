@@ -6,6 +6,8 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
+	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/gocty"
 )
 
 // NrNrqlAlerConditionInvalidAggregationMethodRule checks whether newrelic_nrql_alert_condition has valid aggregation_method
@@ -69,19 +71,26 @@ func (r *NrNrqlAlerConditionInvalidAggregationMethodRule) Check(runner tflint.Ru
 			continue
 		}
 
-		err := runner.EvaluateExpr(attribute.Expr, func(aggregationMethod string) error {
-			if !r.aggregationMethods[aggregationMethod] {
-				return runner.EmitIssue(
-					r,
-					fmt.Sprintf("'%s' is invalid aggregation method", aggregationMethod),
-					attribute.Expr.Range(),
-				)
-			}
-			return nil
-		}, nil)
-
-		if err != nil {
+		var methodCty cty.Value
+		if err := runner.EvaluateExpr(attribute.Expr, &methodCty, nil); err != nil {
 			return err
+		}
+
+		if methodCty.IsNull() || !methodCty.IsKnown() {
+			continue
+		}
+
+		var aggregationMethod string
+		if err := gocty.FromCtyValue(methodCty, &aggregationMethod); err != nil {
+			return err
+		}
+
+		if !r.aggregationMethods[aggregationMethod] {
+			return runner.EmitIssue(
+				r,
+				fmt.Sprintf("'%s' is invalid aggregation method", aggregationMethod),
+				attribute.Expr.Range(),
+			)
 		}
 	}
 

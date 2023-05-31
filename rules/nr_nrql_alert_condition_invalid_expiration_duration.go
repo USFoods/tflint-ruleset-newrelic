@@ -6,6 +6,8 @@ import (
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
+	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/gocty"
 )
 
 // NrNrqlAlerConditionInvalidExpirationDurationRule checks whether newrelic_nrql_alert_condition has valid expiration_duration
@@ -14,6 +16,8 @@ type NrNrqlAlerConditionInvalidExpirationDurationRule struct {
 
 	resourceType  string
 	attributeName string
+	min           int
+	max           int
 }
 
 // NewNrNrqlAlerConditionInvalidExpirationDurationRule returns a new rule
@@ -21,6 +25,8 @@ func NewNrNrqlAlerConditionInvalidExpirationDurationRule() *NrNrqlAlerConditionI
 	return &NrNrqlAlerConditionInvalidExpirationDurationRule{
 		resourceType:  "newrelic_nrql_alert_condition",
 		attributeName: "expiration_duration",
+		min:           30,
+		max:           172800,
 	}
 }
 
@@ -63,20 +69,26 @@ func (r *NrNrqlAlerConditionInvalidExpirationDurationRule) Check(runner tflint.R
 			continue
 		}
 
-		err := runner.EvaluateExpr(attribute.Expr, func(expirationDuration int) error {
-			if expirationDuration < 30 || expirationDuration > 172800 {
-				return runner.EmitIssue(
-					r,
-					fmt.Sprintf("'%d' is invalid expiration_duration", expirationDuration),
-					attribute.Expr.Range(),
-				)
-			}
-
-			return nil
-		}, nil)
-
-		if err != nil {
+		var attrCty cty.Value
+		if err := runner.EvaluateExpr(attribute.Expr, &attrCty, nil); err != nil {
 			return err
+		}
+
+		if attrCty.IsNull() || !attrCty.IsKnown() {
+			continue
+		}
+
+		var expirationDuration int
+		if err := gocty.FromCtyValue(attrCty, &expirationDuration); err != nil {
+			return err
+		}
+
+		if expirationDuration < r.min || expirationDuration > r.max {
+			return runner.EmitIssue(
+				r,
+				fmt.Sprintf("'%d' is invalid value for expiration_duration", expirationDuration),
+				attribute.Expr.Range(),
+			)
 		}
 	}
 

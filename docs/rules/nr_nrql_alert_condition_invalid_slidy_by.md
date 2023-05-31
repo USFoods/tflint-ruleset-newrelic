@@ -5,15 +5,44 @@
 ## Example
 
 ```hcl
-resource "null_resource" "foo" {
-  // TODO: Write the example Terraform code which violates the rule
+resource "newrelic_alert_policy" "foo" {
+  name                = "example"
+  incident_preference = "PER_POLICY"
+}
+
+resource "newrelic_nrql_alert_condition" "foo" {
+  account_id         = var.account_id
+  policy_id          = newrelic_alert_policy.foo.id
+  type               = "static"
+  name               = "foo"
+  description        = "Alert when transactions are taking too long"
+  runbook_url        = "https://www.example.com"
+  enabled            = var.enabled
+  aggregation_window = 60
+  aggregation_method = "event_flow"
+  aggregation_delay  = 30
+  slide_by           = 120 // invalid value!
+
+  nrql {
+    query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
+  }
+
+  critical {
+    operator              = "above"
+    threshold             = 5.5
+    threshold_duration    = 300
+    threshold_occurrences = "ALL"
+  }
 }
 ```
 
 ```bash
 $ tflint
 
-// TODO: Write the output when inspects the above code
+Error: '120' is invalid value for slide_by (nr_synthetics_script_monitor_invalid_slidy_by)
+
+  on main.tf line 31:
+  31:   slide_by           = 120 // invalid value!
 
 ```
 
