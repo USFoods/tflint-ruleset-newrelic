@@ -6,9 +6,10 @@ import (
 	"github.com/hashicorp/hcl/v2"
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/usfoods/tflint-ruleset-newrelic/project"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/gocty"
+
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrNrqlAlerConditionInvalidAggregationTimerMethodRule checks whether newrelic_nrql_alert_condition has valid aggregation timer

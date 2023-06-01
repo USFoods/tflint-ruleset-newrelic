@@ -6,9 +6,10 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/usfoods/tflint-ruleset-newrelic/project"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/gocty"
+
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // TODO: Write the rule's description here
@@ -95,7 +96,7 @@ func (r *NrNrqlAlertConditionInvalidBaselineDirectionRule) Check(runner tflint.R
 		}
 
 		if !r.baselineDirections[strings.ToLower(baselineDirection)] {
-			runner.EmitIssue(
+			return runner.EmitIssue(
 				r,
 				fmt.Sprintf("'%s' is invalid value for baseline_direction", baselineDirection),
 				directionAttr.Expr.Range(),

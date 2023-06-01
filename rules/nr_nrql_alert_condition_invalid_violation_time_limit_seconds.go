@@ -5,8 +5,9 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/usfoods/tflint-ruleset-newrelic/project"
 	"github.com/zclconf/go-cty/cty"
+
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // TODO: Write the rule's description here
@@ -91,7 +92,7 @@ func (r *NrNrqlAlertConditionInvalidViolationTimeLimitSecondsRule) Check(runner 
 		}
 
 		if timeLimit < r.min || timeLimit > r.max {
-			runner.EmitIssue(
+			return runner.EmitIssue(
 				r,
 				fmt.Sprintf("'%d' is an invalid value for violation_time_limit_seconds", timeLimit),
 				attribute.Expr.Range(),

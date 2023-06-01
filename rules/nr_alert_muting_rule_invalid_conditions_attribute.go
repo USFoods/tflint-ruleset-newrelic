@@ -6,6 +6,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
@@ -107,7 +108,7 @@ func (r *NrAlertMutingRuleInvalidConditionsAttributeRule) Check(runner tflint.Ru
 
 				err := runner.EvaluateExpr(attribute.Expr, func(attributeType string) error {
 					if !r.attributeTypes[attributeType] && !strings.HasPrefix(attributeType, "tags.") {
-						runner.EmitIssue(
+						return runner.EmitIssue(
 							r,
 							fmt.Sprintf("'%s' is invalid value for conditions attribute", attributeType),
 							attribute.Expr.Range(),

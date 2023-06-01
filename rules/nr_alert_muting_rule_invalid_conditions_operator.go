@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 

@@ -1,7 +1,6 @@
 package rules
 
 import (
-	"fmt"
 	"testing"
 
 	hcl "github.com/hashicorp/hcl/v2"
@@ -25,7 +24,7 @@ resource "newrelic_nrql_alert_condition" "monitor" {
 			Expected: helper.Issues{
 				{
 					Rule:    NewNrNrqlAlertConditionInvalidEvaluationDelayRule(),
-					Message: fmt.Sprintf("'1800' is an invalid value for evaluation_delay"),
+					Message: "'1800' is an invalid value for evaluation_delay",
 					Range: hcl.Range{
 						Filename: "resource.tf",
 						Start:    hcl.Pos{Line: 4, Column: 22},

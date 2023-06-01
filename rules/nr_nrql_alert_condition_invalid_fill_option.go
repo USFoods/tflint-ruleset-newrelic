@@ -5,9 +5,10 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/usfoods/tflint-ruleset-newrelic/project"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/gocty"
+
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // TODO: Write the rule's description here
@@ -94,7 +95,7 @@ func (r *NrNrqlAlertConditionInvalidFillOptionRule) Check(runner tflint.Runner) 
 		}
 
 		if !r.fillOptions[fillOption] {
-			runner.EmitIssue(
+			return runner.EmitIssue(
 				r,
 				fmt.Sprintf("'%s' is an invalid value for fill_option", fillOption),
 				attribute.Expr.Range(),

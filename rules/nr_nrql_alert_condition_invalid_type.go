@@ -5,9 +5,10 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/usfoods/tflint-ruleset-newrelic/project"
 	"github.com/zclconf/go-cty/cty"
 	"github.com/zclconf/go-cty/cty/gocty"
+
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // NrNrqlAlertConditionInvalidTypeRule checks whether newrelic_nrql_alert_condition has valid type

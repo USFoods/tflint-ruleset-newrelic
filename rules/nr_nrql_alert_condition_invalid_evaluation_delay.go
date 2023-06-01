@@ -5,8 +5,9 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
-	"github.com/usfoods/tflint-ruleset-newrelic/project"
 	"github.com/zclconf/go-cty/cty"
+
+	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
 // TODO: Write the rule's description here
@@ -90,7 +91,7 @@ func (r *NrNrqlAlertConditionInvalidEvaluationDelayRule) Check(runner tflint.Run
 		}
 
 		if evaluationDelay > r.max {
-			runner.EmitIssue(
+			return runner.EmitIssue(
 				r,
 				fmt.Sprintf("'%d' is an invalid value for evaluation_delay", evaluationDelay),
 				attribute.Expr.Range(),
