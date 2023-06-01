@@ -1,4 +1,4 @@
-# nr_nrql_alert_condition_invalid_type
+# nr_synthetics_script_monitor_invalid_aggregation_window
 
 // TODO: Write the rule's description here
 
@@ -13,14 +13,13 @@ resource "newrelic_alert_policy" "foo" {
 resource "newrelic_nrql_alert_condition" "foo" {
   account_id         = var.account_id
   policy_id          = newrelic_alert_policy.foo.id
-  type               = "basic" // invalid value!
+  type               = "static"
   name               = "foo"
   description        = "Alert when transactions are taking too long"
   runbook_url        = "https://www.example.com"
   enabled            = var.enabled
-  aggregation_window = 60
-  aggregation_method = "event_flow"
-  aggregation_delay  = 30
+  aggregation_window = 1800 // invalid value!
+  aggregation_method = "event_flow" 
 
   nrql {
     query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
@@ -38,10 +37,10 @@ resource "newrelic_nrql_alert_condition" "foo" {
 ```bash
 $ tflint
 
-Error: 'basic' is invalid condition type (nr_nrql_alert_condition_invalid_type)
+Error: '1800' is invalid value for aggregation_window (nr_synthetics_script_monitor_invalid_aggregation_window)
 
-  on main.tf line 23:
-  23:   type               = "basic" // invalid value!
+  on main.tf line 28:
+  28:   aggregation_window = 1800 // invalid value!
 
 ```
 

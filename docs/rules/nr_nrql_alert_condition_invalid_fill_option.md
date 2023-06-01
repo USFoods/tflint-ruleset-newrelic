@@ -1,4 +1,4 @@
-# nr_nrql_alert_condition_invalid_type
+# nr_nrql_alert_condition_invalid_fill_option
 
 // TODO: Write the rule's description here
 
@@ -13,7 +13,7 @@ resource "newrelic_alert_policy" "foo" {
 resource "newrelic_nrql_alert_condition" "foo" {
   account_id         = var.account_id
   policy_id          = newrelic_alert_policy.foo.id
-  type               = "basic" // invalid value!
+  type               = "static"
   name               = "foo"
   description        = "Alert when transactions are taking too long"
   runbook_url        = "https://www.example.com"
@@ -21,6 +21,9 @@ resource "newrelic_nrql_alert_condition" "foo" {
   aggregation_window = 60
   aggregation_method = "event_flow"
   aggregation_delay  = 30
+
+  fill_option = "fixed" // invalid value!
+  fill_value  = "1"
 
   nrql {
     query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
@@ -32,16 +35,15 @@ resource "newrelic_nrql_alert_condition" "foo" {
     threshold_duration    = 300
     threshold_occurrences = "ALL"
   }
-}
 ```
 
 ```bash
 $ tflint
 
-Error: 'basic' is invalid condition type (nr_nrql_alert_condition_invalid_type)
+Error: 'fixed' is an invalid value for fill_option (nr_nrql_alert_condition_invalid_fill_option)
 
-  on main.tf line 23:
-  23:   type               = "basic" // invalid value!
+  on main.tf line 32:
+  32:   fill_option = "fixed" // invalid value!
 
 ```
 

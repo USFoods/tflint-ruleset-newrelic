@@ -5,6 +5,9 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+	"github.com/zclconf/go-cty/cty"
+	"github.com/zclconf/go-cty/cty/gocty"
+
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
@@ -68,19 +71,26 @@ func (r *NrNrqlAlertConditionInvalidTypeRule) Check(runner tflint.Runner) error 
 			continue
 		}
 
-		err := runner.EvaluateExpr(attribute.Expr, func(monitorType string) error {
-			if !r.conditionTypes[monitorType] {
-				return runner.EmitIssue(
-					r,
-					fmt.Sprintf("'%s' is invalid condition type", monitorType),
-					attribute.Expr.Range(),
-				)
-			}
-			return nil
-		}, nil)
-
-		if err != nil {
+		var attrCty cty.Value
+		if err := runner.EvaluateExpr(attribute.Expr, &attrCty, nil); err != nil {
 			return err
+		}
+
+		if attrCty.IsNull() || !attrCty.IsKnown() {
+			continue
+		}
+
+		var monitorType string
+		if err := gocty.FromCtyValue(attrCty, &monitorType); err != nil {
+			return err
+		}
+
+		if !r.conditionTypes[monitorType] {
+			return runner.EmitIssue(
+				r,
+				fmt.Sprintf("'%s' is invalid value for type", monitorType),
+				attribute.Expr.Range(),
+			)
 		}
 	}
 

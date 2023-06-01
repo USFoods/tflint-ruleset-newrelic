@@ -24,3 +24,5 @@ install: build
 include build/test.mk
 include build/lint.mk
 include build/deps.mk
+
+.PHONY: build install clean

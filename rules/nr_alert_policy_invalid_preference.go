@@ -5,6 +5,7 @@ import (
 
 	"github.com/terraform-linters/tflint-plugin-sdk/hclext"
 	"github.com/terraform-linters/tflint-plugin-sdk/tflint"
+
 	"github.com/usfoods/tflint-ruleset-newrelic/project"
 )
 
@@ -71,7 +72,7 @@ func (r *NrAlertPolicyInvalidPreferenceRule) Check(runner tflint.Runner) error {
 			if !r.preferenceTypes[incidentPreference] {
 				return runner.EmitIssue(
 					r,
-					fmt.Sprintf("'%s' is invalid incident preference", incidentPreference),
+					fmt.Sprintf("'%s' is invalid value for incident_preference", incidentPreference),
 					attribute.Expr.Range(),
 				)
 			}

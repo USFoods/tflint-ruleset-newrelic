@@ -1,4 +1,4 @@
-# nr_nrql_alert_condition_invalid_type
+# nr_synthetics_script_monitor_invalid_slidy_by
 
 // TODO: Write the rule's description here
 
@@ -13,7 +13,7 @@ resource "newrelic_alert_policy" "foo" {
 resource "newrelic_nrql_alert_condition" "foo" {
   account_id         = var.account_id
   policy_id          = newrelic_alert_policy.foo.id
-  type               = "basic" // invalid value!
+  type               = "static"
   name               = "foo"
   description        = "Alert when transactions are taking too long"
   runbook_url        = "https://www.example.com"
@@ -21,6 +21,7 @@ resource "newrelic_nrql_alert_condition" "foo" {
   aggregation_window = 60
   aggregation_method = "event_flow"
   aggregation_delay  = 30
+  slide_by           = 120 // invalid value!
 
   nrql {
     query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
@@ -38,10 +39,10 @@ resource "newrelic_nrql_alert_condition" "foo" {
 ```bash
 $ tflint
 
-Error: 'basic' is invalid condition type (nr_nrql_alert_condition_invalid_type)
+Error: '120' is invalid value for slide_by (nr_synthetics_script_monitor_invalid_slidy_by)
 
-  on main.tf line 23:
-  23:   type               = "basic" // invalid value!
+  on main.tf line 31:
+  31:   slide_by           = 120 // invalid value!
 
 ```
 

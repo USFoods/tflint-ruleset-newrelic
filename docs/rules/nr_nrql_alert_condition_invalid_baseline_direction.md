@@ -1,4 +1,4 @@
-# nr_nrql_alert_condition_invalid_type
+# nr_nrql_alert_condition_invalid_baseline_direction
 
 // TODO: Write the rule's description here
 
@@ -13,14 +13,15 @@ resource "newrelic_alert_policy" "foo" {
 resource "newrelic_nrql_alert_condition" "foo" {
   account_id         = var.account_id
   policy_id          = newrelic_alert_policy.foo.id
-  type               = "basic" // invalid value!
+  type               = "baseline"
   name               = "foo"
   description        = "Alert when transactions are taking too long"
   runbook_url        = "https://www.example.com"
   enabled            = var.enabled
-  aggregation_window = 60
-  aggregation_method = "event_flow"
-  aggregation_delay  = 30
+  aggregation_window = 60 
+  aggregation_method = "event_flow" 
+  aggregation_delay = 30
+  baseline_direction = "JUST_UPPER" // invalid value!
 
   nrql {
     query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
@@ -38,10 +39,10 @@ resource "newrelic_nrql_alert_condition" "foo" {
 ```bash
 $ tflint
 
-Error: 'basic' is invalid condition type (nr_nrql_alert_condition_invalid_type)
+Error: 'JUST_UPPER' is invalid value for baseline_direction (nr_nrql_alert_condition_invalid_baseline_direction)
 
-  on main.tf line 23:
-  23:   type               = "basic" // invalid value!
+  on main.tf line 31:
+  31:   baseline_direction = "JUST_UPPER" // invalid value!
 
 ```
 

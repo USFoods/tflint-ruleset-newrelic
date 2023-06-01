@@ -1,4 +1,4 @@
-# nr_nrql_alert_condition_invalid_type
+# nr_nrql_alert_condition_invalid_aggregation_timer_method
 
 // TODO: Write the rule's description here
 
@@ -13,14 +13,14 @@ resource "newrelic_alert_policy" "foo" {
 resource "newrelic_nrql_alert_condition" "foo" {
   account_id         = var.account_id
   policy_id          = newrelic_alert_policy.foo.id
-  type               = "basic" // invalid value!
+  type               = "static"
   name               = "foo"
   description        = "Alert when transactions are taking too long"
   runbook_url        = "https://www.example.com"
   enabled            = var.enabled
   aggregation_window = 60
-  aggregation_method = "event_flow"
-  aggregation_delay  = 30
+  aggregation_method = "cadence" // invalid value!
+  aggregation_timer = 60
 
   nrql {
     query = "SELECT average(duration) FROM Transaction where appName = 'Your App'"
@@ -38,10 +38,10 @@ resource "newrelic_nrql_alert_condition" "foo" {
 ```bash
 $ tflint
 
-Error: 'basic' is invalid condition type (nr_nrql_alert_condition_invalid_type)
+Error: aggregation_timer is invalid attribute for aggregation_method 'cadence' (nr_synthetics_script_monitor_invalid_aggregation_timer_method)
 
-  on main.tf line 23:
-  23:   type               = "basic" // invalid value!
+  on main.tf line 29:
+  29:   aggregation_method = "cadence" // invalid value!
 
 ```
 
