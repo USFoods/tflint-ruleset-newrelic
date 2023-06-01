@@ -16,8 +16,6 @@ type NrNrqlAlerConditionInvalidAggregationTimerMethodRule struct {
 	tflint.DefaultRule
 
 	resourceType string
-	min          int
-	max          int
 }
 
 // NewNrNrqlAlerConditionInvalidAggregationTimerMethodRule returns a new rule
