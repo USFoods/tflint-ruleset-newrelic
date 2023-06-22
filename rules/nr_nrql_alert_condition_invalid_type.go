@@ -76,7 +76,7 @@ func (r *NrNrqlAlertConditionInvalidTypeRule) Check(runner tflint.Runner) error 
 			return err
 		}
 
-		if attrCty.IsNull() || !attrCty.IsKnown() {
+		if attrCty.IsNull() || !attrCty.IsWhollyKnown() {
 			continue
 		}
 

@@ -79,7 +79,7 @@ func (r *NrNrqlAlertConditionInvalidAggregationDelayCadenceRule) Check(runner tf
 			return err
 		}
 
-		if delayCty.IsNull() || !delayCty.IsKnown() {
+		if delayCty.IsNull() || !delayCty.IsWhollyKnown() {
 			continue
 		}
 

@@ -77,7 +77,7 @@ func (r *NrNrqlAlerConditionInvalidAggregationMethodRule) Check(runner tflint.Ru
 			return err
 		}
 
-		if methodCty.IsNull() || !methodCty.IsKnown() {
+		if methodCty.IsNull() || !methodCty.IsWhollyKnown() {
 			continue
 		}
 

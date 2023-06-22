@@ -85,7 +85,7 @@ func (r *NrNrqlAlertConditionInvalidFillOptionRule) Check(runner tflint.Runner) 
 			return err
 		}
 
-		if attrCty.IsNull() || !attrCty.IsKnown() {
+		if attrCty.IsNull() || !attrCty.IsWhollyKnown() {
 			continue
 		}
 

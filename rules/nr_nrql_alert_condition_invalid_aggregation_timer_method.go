@@ -72,7 +72,7 @@ func (r *NrNrqlAlerConditionInvalidAggregationTimerMethodRule) Check(runner tfli
 			return err
 		}
 
-		if timerCty.IsNull() || !timerCty.IsKnown() {
+		if timerCty.IsNull() || !timerCty.IsWhollyKnown() {
 			continue
 		}
 
@@ -91,7 +91,7 @@ func (r *NrNrqlAlerConditionInvalidAggregationTimerMethodRule) Check(runner tfli
 				return err
 			}
 
-			if !methodCty.IsNull() || methodCty.IsKnown() {
+			if !methodCty.IsNull() || methodCty.IsWhollyKnown() {
 				if err := gocty.FromCtyValue(methodCty, &aggregationMethod); err != nil {
 					return err
 				}

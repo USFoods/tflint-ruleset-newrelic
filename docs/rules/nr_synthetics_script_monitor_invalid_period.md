@@ -1,4 +1,4 @@
-# nr_synthetics_script_monitor_invalid_type
+# nr_synthetics_script_monitor_invalid_period
 
 // TODO: Write the rule's description here
 
@@ -8,9 +8,9 @@
 resource "newrelic_synthetics_script_monitor" "monitor" {
   status               = "ENABLED"
   name                 = "script_monitor"
-  type                 = "SCRIPT_MONITOR" // invalid value
+  type                 = "SCRIPT_API"
   locations_public     = ["US_WEST_1", "US_WEST_2"]
-  period               = "EVERY_HOUR" 
+  period               = "3600" // invalid value
 
   script               = "console.log('it works!')"
 
@@ -28,12 +28,12 @@ resource "newrelic_synthetics_script_monitor" "monitor" {
 ```bash
 $ tflint
 
-Error: 'SCRIPT_MONITOR' is invalid monitor type (nr_synthetics_script_monitor_invalid_type)
+Error: '3600' is invalid period (nr_synthetics_script_monitor_invalid_period)
 
-  on main.tf line 18:
-  18:   type                 = "SCRIPT_MONITOR" // invalid value
+  on main.tf line 20:
+  20:   period               = "3600" // invalid value
 
-Reference: https://github.com/usfoods/tflint-ruleset-newrelic/blob/v0.4.0/docs/rules/nr_synthetics_script_monitor_invalid_type.md
+Reference: https://github.com/usfoods/tflint-ruleset-newrelic/blob/v0.4.0/docs/rules/nr_synthetics_script_monitor_invalid_period.md
 
 ```
 

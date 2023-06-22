@@ -86,7 +86,7 @@ func (r *NrNrqlAlertConditionInvalidBaselineDirectionRule) Check(runner tflint.R
 			return err
 		}
 
-		if directionCty.IsNull() || !directionCty.IsKnown() {
+		if directionCty.IsNull() || !directionCty.IsWhollyKnown() {
 			continue
 		}
 

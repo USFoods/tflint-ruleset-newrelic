@@ -81,7 +81,7 @@ func (r *NrNrqlAlertConditionInvalidEvaluationDelayRule) Check(runner tflint.Run
 			return err
 		}
 
-		if attrCty.IsNull() || !attrCty.IsKnown() {
+		if attrCty.IsNull() || !attrCty.IsWhollyKnown() {
 			continue
 		}
 

@@ -72,7 +72,7 @@ func (r *NrNrqlAlerConditionInvalidSlidyByRule) Check(runner tflint.Runner) erro
 			return err
 		}
 
-		if slideByCty.IsNull() || !slideByCty.IsKnown() {
+		if slideByCty.IsNull() || !slideByCty.IsWhollyKnown() {
 			continue
 		}
 
@@ -88,7 +88,7 @@ func (r *NrNrqlAlerConditionInvalidSlidyByRule) Check(runner tflint.Runner) erro
 
 		// Default window for aggregation_window is 60
 		aggregationWindow := 60
-		if !windowCty.IsNull() && windowCty.IsKnown() {
+		if !windowCty.IsNull() && windowCty.IsWhollyKnown() {
 			if err := gocty.FromCtyValue(windowCty, &aggregationWindow); err != nil {
 				return err
 			}

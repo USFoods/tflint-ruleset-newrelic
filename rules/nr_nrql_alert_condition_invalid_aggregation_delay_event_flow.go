@@ -79,7 +79,7 @@ func (r *NrNrqlAlertConditionInvalidAggregationDelayEventFlowRule) Check(runner 
 			return err
 		}
 
-		if delayCty.IsNull() || !delayCty.IsKnown() {
+		if delayCty.IsNull() || !delayCty.IsWhollyKnown() {
 			continue
 		}
 

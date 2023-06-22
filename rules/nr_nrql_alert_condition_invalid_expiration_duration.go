@@ -75,7 +75,7 @@ func (r *NrNrqlAlerConditionInvalidExpirationDurationRule) Check(runner tflint.R
 			return err
 		}
 
-		if attrCty.IsNull() || !attrCty.IsKnown() {
+		if attrCty.IsNull() || !attrCty.IsWhollyKnown() {
 			continue
 		}
 

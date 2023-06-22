@@ -5,15 +5,40 @@
 ## Example
 
 ```hcl
-resource "null_resource" "foo" {
-  // TODO: Write the example Terraform code which violates the rule
+resource "newrelic_synthetics_monitor" "monitor" {
+  status           = "ENABLED"
+  name             = "monitor"
+  period           = "EVERY_MINUTE" 
+  uri              = "https://www.one.newrelic.com"
+  type             = "BASIC" // invalid value
+  locations_public = ["AP_SOUTH_1"]
+
+  custom_header {
+    name  = "some_name"
+    value = "some_value"
+  }
+
+  treat_redirect_as_failure = true
+  validation_string         = "success"
+  bypass_head_request       = true
+  verify_ssl                = true
+
+  tag {
+    key    = "some_key"
+    values = ["some_value"]
+  }
 }
 ```
 
 ```bash
 $ tflint
 
-// TODO: Write the output when inspects the above code
+Error: 'BASIC' is invalid monitor type (nr_synthetics_monitor_invalid_type)
+
+  on main.tf line 20:
+  20:   type             = "BASIC" // invalid value
+
+Reference: https://github.com/usfoods/tflint-ruleset-newrelic/blob/v0.4.0/docs/rules/nr_synthetics_monitor_invalid_type.md
 
 ```
 

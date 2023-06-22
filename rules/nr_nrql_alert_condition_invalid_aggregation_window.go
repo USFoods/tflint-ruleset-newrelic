@@ -75,7 +75,7 @@ func (r *NrNrqlAlerConditionInvalidAggregationWindowRule) Check(runner tflint.Ru
 			return err
 		}
 
-		if attrCty.IsNull() || !attrCty.IsKnown() {
+		if attrCty.IsNull() || !attrCty.IsWhollyKnown() {
 			continue
 		}
 

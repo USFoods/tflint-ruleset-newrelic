@@ -82,7 +82,7 @@ func (r *NrNrqlAlertConditionInvalidViolationTimeLimitSecondsRule) Check(runner 
 			return err
 		}
 
-		if attrCty.IsNull() || !attrCty.IsKnown() {
+		if attrCty.IsNull() || !attrCty.IsWhollyKnown() {
 			continue
 		}
 
